@@ -1,0 +1,930 @@
+/* Schémas du contenu : décrivent les formulaires de l'espace admin (généré depuis l'ancienne configuration). */
+window.UNIR_SCHEMAS = {
+ "files": {
+  "accueil": {
+   "label": "Page 1 · Accueil",
+   "file": "content/accueil.json",
+   "fields": [
+    {
+     "name": "hero",
+     "label": "Grand bandeau d'accueil",
+     "widget": "object",
+     "fields": [
+      {
+       "name": "surtitre",
+       "label": "Petit texte au-dessus du titre",
+       "widget": "string"
+      },
+      {
+       "name": "ligne1",
+       "label": "Titre – ligne 1",
+       "widget": "string"
+      },
+      {
+       "name": "accent",
+       "label": "Titre – ligne 2 (en couleur)",
+       "widget": "string"
+      },
+      {
+       "name": "ligne3",
+       "label": "Titre – ligne 3",
+       "widget": "string"
+      },
+      {
+       "name": "engagement",
+       "label": "Texte avant les mots animés",
+       "widget": "string"
+      },
+      {
+       "name": "mots_animes",
+       "label": "Mots qui s'écrivent tout seuls",
+       "widget": "list",
+       "field": {
+        "name": "mot",
+        "label": "Mot",
+        "widget": "string"
+       }
+      },
+      {
+       "name": "intro",
+       "label": "Paragraphe d'introduction",
+       "widget": "text"
+      },
+      {
+       "name": "bouton1",
+       "label": "Bouton principal (vers l'adhésion)",
+       "widget": "string"
+      },
+      {
+       "name": "bouton2",
+       "label": "Bouton secondaire (vers les actions)",
+       "widget": "string"
+      },
+      {
+       "name": "badge1_titre",
+       "label": "Étiquette flottante 1 – titre",
+       "widget": "string",
+       "required": false
+      },
+      {
+       "name": "badge1_texte",
+       "label": "Étiquette flottante 1 – texte",
+       "widget": "string",
+       "required": false
+      },
+      {
+       "name": "badge2_titre",
+       "label": "Étiquette flottante 2 – titre",
+       "widget": "string",
+       "required": false
+      },
+      {
+       "name": "badge2_texte",
+       "label": "Étiquette flottante 2 – texte",
+       "widget": "string",
+       "required": false
+      }
+     ]
+    },
+    {
+     "name": "bandeau",
+     "label": "Bande défilante (mots)",
+     "widget": "list",
+     "field": {
+      "name": "mot",
+      "label": "Mot",
+      "widget": "string"
+     }
+    },
+    {
+     "name": "apropos",
+     "label": "Section « À propos »",
+     "widget": "object",
+     "fields": [
+      {
+       "name": "surtitre",
+       "label": "Surtitre",
+       "widget": "string"
+      },
+      {
+       "name": "titre",
+       "label": "Titre",
+       "widget": "string"
+      },
+      {
+       "name": "accent",
+       "label": "Fin du titre (en couleur)",
+       "widget": "string"
+      },
+      {
+       "name": "paragraphes",
+       "label": "Paragraphes",
+       "widget": "list",
+       "field": {
+        "name": "paragraphe",
+        "label": "Paragraphe",
+        "widget": "text"
+       }
+      },
+      {
+       "name": "photo",
+       "label": "Photo",
+       "widget": "image",
+       "required": false
+      },
+      {
+       "name": "photo_texte",
+       "label": "Description de la photo (accessibilité)",
+       "widget": "string",
+       "required": false
+      },
+      {
+       "name": "annee",
+       "label": "Année dans le badge rond",
+       "widget": "string",
+       "required": false
+      },
+      {
+       "name": "texte_badge",
+       "label": "Texte qui tourne autour du badge",
+       "widget": "string",
+       "required": false
+      },
+      {
+       "name": "faits",
+       "label": "Encadrés d'informations",
+       "widget": "list",
+       "summary": "{{libelle}} : {{valeur}}",
+       "fields": [
+        {
+         "name": "libelle",
+         "label": "Libellé",
+         "widget": "string"
+        },
+        {
+         "name": "valeur",
+         "label": "Valeur",
+         "widget": "string"
+        }
+       ]
+      },
+      {
+       "name": "bouton",
+       "label": "Texte du bouton vers le site du parti",
+       "widget": "string",
+       "required": false
+      }
+     ]
+    },
+    {
+     "name": "chiffres",
+     "label": "Chiffres clés",
+     "widget": "list",
+     "summary": "{{valeur}}{{suffixe}} — {{libelle}}",
+     "fields": [
+      {
+       "name": "valeur",
+       "label": "Nombre",
+       "widget": "number",
+       "value_type": "int"
+      },
+      {
+       "name": "suffixe",
+       "label": "Signe après le nombre (ex. +)",
+       "widget": "string",
+       "required": false
+      },
+      {
+       "name": "format",
+       "label": "Type de nombre",
+       "widget": "select",
+       "default": "nombre",
+       "options": [
+        {
+         "label": "Nombre (115 400)",
+         "value": "nombre"
+        },
+        {
+         "label": "Année (2012)",
+         "value": "annee"
+        }
+       ]
+      },
+      {
+       "name": "libelle",
+       "label": "Libellé",
+       "widget": "string"
+      }
+     ]
+    },
+    {
+     "name": "valeurs",
+     "label": "Section « Nos valeurs »",
+     "widget": "object",
+     "fields": [
+      {
+       "name": "surtitre",
+       "label": "Surtitre",
+       "widget": "string"
+      },
+      {
+       "name": "titre",
+       "label": "Titre",
+       "widget": "string"
+      },
+      {
+       "name": "accent",
+       "label": "Fin du titre (en couleur)",
+       "widget": "string"
+      },
+      {
+       "name": "intro",
+       "label": "Introduction",
+       "widget": "text",
+       "required": false
+      },
+      {
+       "name": "liste",
+       "label": "Valeurs",
+       "widget": "list",
+       "summary": "{{titre}}",
+       "fields": [
+        {
+         "name": "icone",
+         "label": "Icône",
+         "widget": "select",
+         "options": [
+          {
+           "label": "Paix (bouclier)",
+           "value": "paix"
+          },
+          {
+           "label": "Développement (maison)",
+           "value": "developpement"
+          },
+          {
+           "label": "Proximité (personnes)",
+           "value": "proximite"
+          },
+          {
+           "label": "Jeunesse (étoile)",
+           "value": "jeunesse"
+          },
+          {
+           "label": "Éducation (diplôme)",
+           "value": "education"
+          },
+          {
+           "label": "Santé (cœur)",
+           "value": "sante"
+          },
+          {
+           "label": "Solidarité (liens)",
+           "value": "solidarite"
+          }
+         ]
+        },
+        {
+         "name": "titre",
+         "label": "Titre",
+         "widget": "string"
+        },
+        {
+         "name": "texte",
+         "label": "Texte",
+         "widget": "text"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "citations",
+     "label": "Citations (carrousel)",
+     "widget": "list",
+     "summary": "{{texte}}",
+     "fields": [
+      {
+       "name": "texte",
+       "label": "Citation",
+       "widget": "text"
+      },
+      {
+       "name": "auteur",
+       "label": "Auteur",
+       "widget": "string"
+      },
+      {
+       "name": "precision",
+       "label": "Précision sous l'auteur",
+       "widget": "string",
+       "required": false
+      }
+     ]
+    }
+   ]
+  },
+  "section": {
+   "label": "Page 2 · La section (titres)",
+   "file": "content/section.json",
+   "fields": [
+    {
+     "name": "entete",
+     "label": "Bandeau du haut de page",
+     "widget": "object",
+     "fields": [
+      {
+       "name": "surtitre",
+       "label": "Surtitre",
+       "widget": "string"
+      },
+      {
+       "name": "titre",
+       "label": "Titre",
+       "widget": "string"
+      },
+      {
+       "name": "accent",
+       "label": "Fin du titre (en couleur)",
+       "widget": "string"
+      },
+      {
+       "name": "intro",
+       "label": "Introduction",
+       "widget": "text",
+       "required": false
+      }
+     ]
+    },
+    {
+     "name": "bureau",
+     "label": "Titres de la partie Bureau",
+     "widget": "object",
+     "fields": [
+      {
+       "name": "surtitre",
+       "label": "Surtitre",
+       "widget": "string"
+      },
+      {
+       "name": "titre",
+       "label": "Titre",
+       "widget": "string"
+      },
+      {
+       "name": "accent",
+       "label": "Fin du titre (en couleur)",
+       "widget": "string"
+      },
+      {
+       "name": "intro",
+       "label": "Introduction",
+       "widget": "text",
+       "required": false
+      }
+     ]
+    },
+    {
+     "name": "actions",
+     "label": "Titres de la partie Actions",
+     "widget": "object",
+     "fields": [
+      {
+       "name": "surtitre",
+       "label": "Surtitre",
+       "widget": "string"
+      },
+      {
+       "name": "titre",
+       "label": "Titre",
+       "widget": "string"
+      },
+      {
+       "name": "accent",
+       "label": "Fin du titre (en couleur)",
+       "widget": "string"
+      },
+      {
+       "name": "intro",
+       "label": "Introduction",
+       "widget": "text",
+       "required": false
+      }
+     ]
+    },
+    {
+     "name": "galerie",
+     "label": "Titres de la partie Galerie",
+     "widget": "object",
+     "fields": [
+      {
+       "name": "surtitre",
+       "label": "Surtitre",
+       "widget": "string"
+      },
+      {
+       "name": "titre",
+       "label": "Titre",
+       "widget": "string"
+      },
+      {
+       "name": "accent",
+       "label": "Fin du titre (en couleur)",
+       "widget": "string"
+      },
+      {
+       "name": "intro",
+       "label": "Introduction",
+       "widget": "text",
+       "required": false
+      }
+     ]
+    }
+   ]
+  },
+  "rejoindre": {
+   "label": "Page 3 · Nous rejoindre",
+   "file": "content/rejoindre.json",
+   "fields": [
+    {
+     "name": "entete",
+     "label": "Bandeau du haut de page",
+     "widget": "object",
+     "fields": [
+      {
+       "name": "surtitre",
+       "label": "Surtitre",
+       "widget": "string"
+      },
+      {
+       "name": "titre",
+       "label": "Titre",
+       "widget": "string"
+      },
+      {
+       "name": "accent",
+       "label": "Fin du titre (en couleur)",
+       "widget": "string"
+      },
+      {
+       "name": "intro",
+       "label": "Introduction",
+       "widget": "text",
+       "required": false
+      }
+     ]
+    },
+    {
+     "name": "actualites",
+     "label": "Titres de la partie Actualités",
+     "widget": "object",
+     "fields": [
+      {
+       "name": "surtitre",
+       "label": "Surtitre",
+       "widget": "string"
+      },
+      {
+       "name": "titre",
+       "label": "Titre",
+       "widget": "string"
+      },
+      {
+       "name": "accent",
+       "label": "Fin du titre (en couleur)",
+       "widget": "string"
+      },
+      {
+       "name": "intro",
+       "label": "Introduction",
+       "widget": "text",
+       "required": false
+      }
+     ]
+    },
+    {
+     "name": "adhesion",
+     "label": "Partie Adhésion",
+     "widget": "object",
+     "fields": [
+      {
+       "name": "surtitre",
+       "label": "Surtitre",
+       "widget": "string"
+      },
+      {
+       "name": "titre",
+       "label": "Titre",
+       "widget": "string"
+      },
+      {
+       "name": "accent",
+       "label": "Fin du titre (en couleur)",
+       "widget": "string"
+      },
+      {
+       "name": "intro",
+       "label": "Introduction",
+       "widget": "text"
+      },
+      {
+       "name": "etapes",
+       "label": "Étapes",
+       "widget": "list",
+       "summary": "{{titre}}",
+       "fields": [
+        {
+         "name": "titre",
+         "label": "Titre",
+         "widget": "string"
+        },
+        {
+         "name": "texte",
+         "label": "Texte",
+         "widget": "string"
+        }
+       ]
+      },
+      {
+       "name": "choix",
+       "label": "Choix « Votre demande » du formulaire",
+       "widget": "list",
+       "field": {
+        "name": "choix",
+        "label": "Choix",
+        "widget": "string"
+       }
+      },
+      {
+       "name": "note",
+       "label": "Note sous le bouton",
+       "widget": "string",
+       "required": false
+      }
+     ]
+    },
+    {
+     "name": "contact",
+     "label": "Titres de la partie Contact",
+     "widget": "object",
+     "fields": [
+      {
+       "name": "surtitre",
+       "label": "Surtitre",
+       "widget": "string"
+      },
+      {
+       "name": "titre",
+       "label": "Titre",
+       "widget": "string"
+      },
+      {
+       "name": "accent",
+       "label": "Fin du titre (en couleur)",
+       "widget": "string"
+      },
+      {
+       "name": "intro",
+       "label": "Introduction",
+       "widget": "text",
+       "required": false
+      }
+     ]
+    }
+   ]
+  },
+  "bureau": {
+   "label": "Membres du bureau",
+   "file": "content/bureau.json",
+   "fields": [
+    {
+     "name": "membres",
+     "label": "Membres",
+     "label_singular": "membre",
+     "widget": "list",
+     "summary": "{{nom}} — {{fonction}}",
+     "fields": [
+      {
+       "name": "nom",
+       "label": "Nom et prénom",
+       "widget": "string"
+      },
+      {
+       "name": "fonction",
+       "label": "Fonction",
+       "widget": "string"
+      },
+      {
+       "name": "photo",
+       "label": "Photo (portrait)",
+       "widget": "image",
+       "required": false,
+       "hint": "Sans photo, les initiales s'affichent."
+      },
+      {
+       "name": "facebook",
+       "label": "Lien Facebook",
+       "widget": "string",
+       "required": false
+      },
+      {
+       "name": "whatsapp",
+       "label": "Numéro WhatsApp",
+       "widget": "string",
+       "required": false,
+       "hint": "Chiffres uniquement, avec l'indicatif. Exemple : 22890123456"
+      }
+     ]
+    }
+   ]
+  },
+  "actions": {
+   "label": "Actions (frise)",
+   "file": "content/actions.json",
+   "fields": [
+    {
+     "name": "liste",
+     "label": "Actions",
+     "label_singular": "action",
+     "widget": "list",
+     "summary": "{{date}} — {{titre}}",
+     "fields": [
+      {
+       "name": "date",
+       "label": "Date",
+       "widget": "string",
+       "hint": "Texte libre. Exemple : 12 mars 2026, ou Mars 2026"
+      },
+      {
+       "name": "titre",
+       "label": "Titre",
+       "widget": "string"
+      },
+      {
+       "name": "texte",
+       "label": "Description",
+       "widget": "text"
+      },
+      {
+       "name": "etiquette",
+       "label": "Étiquette",
+       "widget": "string",
+       "required": false,
+       "hint": "Exemple : Jeunesse, Femmes, Action citoyenne"
+      }
+     ]
+    }
+   ]
+  },
+  "galerie": {
+   "label": "Galerie photos",
+   "file": "content/galerie.json",
+   "fields": [
+    {
+     "name": "photos",
+     "label": "Photos",
+     "label_singular": "photo",
+     "widget": "list",
+     "summary": "{{titre}} ({{categorie}})",
+     "fields": [
+      {
+       "name": "image",
+       "label": "Photo",
+       "widget": "image"
+      },
+      {
+       "name": "titre",
+       "label": "Légende",
+       "widget": "string"
+      },
+      {
+       "name": "categorie",
+       "label": "Catégorie (filtre)",
+       "widget": "select",
+       "options": [
+        {
+         "label": "Rencontres",
+         "value": "Rencontres"
+        },
+        {
+         "label": "Jeunesse",
+         "value": "Jeunesse"
+        },
+        {
+         "label": "Femmes",
+         "value": "Femmes"
+        },
+        {
+         "label": "Actions sociales",
+         "value": "Actions sociales"
+        },
+        {
+         "label": "Mobilisation",
+         "value": "Mobilisation"
+        },
+        {
+         "label": "Autre",
+         "value": "Autre"
+        }
+       ]
+      },
+      {
+       "name": "format",
+       "label": "Taille dans la grille",
+       "widget": "select",
+       "default": "normal",
+       "options": [
+        {
+         "label": "Normale (1 case)",
+         "value": "normal"
+        },
+        {
+         "label": "Large (2 cases en largeur)",
+         "value": "large"
+        },
+        {
+         "label": "Grande (2 × 2 cases)",
+         "value": "grand"
+        },
+        {
+         "label": "Pleine largeur",
+         "value": "pleine"
+        }
+       ]
+      },
+      {
+       "name": "cadrage",
+       "label": "Partie de la photo à garder visible",
+       "widget": "select",
+       "default": "centre",
+       "options": [
+        {
+         "label": "Haut",
+         "value": "haut"
+        },
+        {
+         "label": "Centre",
+         "value": "centre"
+        },
+        {
+         "label": "Bas",
+         "value": "bas"
+        }
+       ]
+      },
+      {
+       "name": "description",
+       "label": "Description (accessibilité)",
+       "widget": "string",
+       "required": false
+      }
+     ]
+    }
+   ]
+  },
+  "parametres": {
+   "label": "Coordonnées et réseaux",
+   "file": "content/site.json",
+   "fields": [
+    {
+     "name": "section",
+     "label": "Nom de la section",
+     "widget": "string",
+     "hint": "Affiché dans l'en-tête et le pied de page (ex. Légbassito)."
+    },
+    {
+     "name": "whatsapp",
+     "label": "Numéro WhatsApp (formulaire d'adhésion)",
+     "widget": "string",
+     "hint": "Chiffres uniquement, avec l'indicatif, sans + ni espaces. Exemple : 22890123456"
+    },
+    {
+     "name": "telephone",
+     "label": "Téléphone affiché",
+     "widget": "string",
+     "hint": "Exemple : +228 90 12 34 56"
+    },
+    {
+     "name": "email",
+     "label": "E-mail",
+     "widget": "string"
+    },
+    {
+     "name": "adresse",
+     "label": "Adresse du siège",
+     "widget": "string"
+    },
+    {
+     "name": "lien_carte",
+     "label": "Lien Google Maps",
+     "widget": "string",
+     "required": false
+    },
+    {
+     "name": "site_parti",
+     "label": "Site national du parti",
+     "widget": "string",
+     "required": false
+    },
+    {
+     "name": "facebook",
+     "label": "Page Facebook (lien)",
+     "widget": "string",
+     "required": false,
+     "hint": "Laisser vide pour masquer l'icône."
+    },
+    {
+     "name": "tiktok",
+     "label": "Compte TikTok (lien)",
+     "widget": "string",
+     "required": false
+    },
+    {
+     "name": "youtube",
+     "label": "Chaîne YouTube (lien)",
+     "widget": "string",
+     "required": false
+    },
+    {
+     "name": "texte_pied",
+     "label": "Texte du pied de page",
+     "widget": "text"
+    }
+   ]
+  }
+ },
+ "article": {
+  "folder": "content/actualites",
+  "fields": [
+   {
+    "name": "titre",
+    "label": "Titre",
+    "widget": "string"
+   },
+   {
+    "name": "date",
+    "label": "Date",
+    "widget": "datetime"
+   },
+   {
+    "name": "categorie",
+    "label": "Catégorie",
+    "widget": "select",
+    "default": "Annonce",
+    "options": [
+     {
+      "label": "Annonce",
+      "value": "Annonce"
+     },
+     {
+      "label": "Mobilisation",
+      "value": "Mobilisation"
+     },
+     {
+      "label": "Agenda",
+      "value": "Agenda"
+     },
+     {
+      "label": "Communiqué",
+      "value": "Communiqué"
+     },
+     {
+      "label": "Compte rendu",
+      "value": "Compte rendu"
+     },
+     {
+      "label": "Jeunesse",
+      "value": "Jeunesse"
+     },
+     {
+      "label": "Femmes",
+      "value": "Femmes"
+     }
+    ]
+   },
+   {
+    "name": "image",
+    "label": "Image principale",
+    "widget": "image",
+    "required": false
+   },
+   {
+    "name": "resume",
+    "label": "Résumé (affiché sur la carte)",
+    "widget": "text"
+   },
+   {
+    "name": "corps",
+    "label": "Texte de l'article",
+    "widget": "markdown"
+   },
+   {
+    "name": "brouillon",
+    "label": "Brouillon (ne pas publier)",
+    "widget": "boolean",
+    "default": false,
+    "required": false
+   }
+  ]
+ }
+};

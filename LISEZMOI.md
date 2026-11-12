@@ -10,7 +10,8 @@ Site de 3 pages (Accueil · La section · Nous rejoindre) avec un **espace admin
 | `style.css`, `script.js` | Design et animations, communs aux pages |
 | `content/` | **Tout le contenu** : textes, chiffres, bureau, actions, galerie, actualités, coordonnées |
 | `assets/` | Logo, polices, photos (`assets/uploads/` reçoit les photos ajoutées depuis l'admin) |
-| `admin/` | L'espace d'administration (écran de connexion + Decap CMS, `config.yml` décrit les formulaires) |
+| `admin/` | L'espace d'administration sur mesure : connexion (`login.js`), tableau de bord (`app.js`, `app.css`), description des formulaires (`schemas.js`) |
+| `netlify/functions/admins.js` | Petit service qui permet d'inviter et retirer des administrateurs depuis le tableau de bord |
 | `netlify.toml` | Publication sur Netlify |
 
 ## Hébergement
@@ -19,21 +20,25 @@ Le site est hébergé sur **Netlify**, relié à ce dépôt GitHub : chaque modi
 
 ## Comptes administrateurs (par e-mail)
 
-- Les comptes se gèrent dans Netlify : **Projet → Identity** (inscription *sur invitation uniquement*).
-- **Inviter un admin** : Identity → **Invite users** → saisir son adresse e-mail.
-  La personne reçoit un e-mail, clique sur le lien, choisit son mot de passe : son compte est actif.
-- **Mot de passe oublié** : lien « Mot de passe oublié ? » sur l'écran de connexion de l'admin.
-- **Retirer un admin** : Identity → cliquer sur la personne → **Delete user**.
+- **Inviter un admin** : espace admin → **Administrateurs** → saisir son adresse e-mail → **Envoyer l'invitation**.
+  La personne reçoit un e-mail (envoyé par Netlify, en anglais), clique sur le lien et choisit son mot de passe.
+- **Retirer un admin** : espace admin → **Administrateurs** → icône corbeille.
+- **Mot de passe oublié** : lien « Mot de passe oublié ? » sur l'écran de connexion.
+- **Changer son mot de passe** : espace admin → **Mon compte**.
+- Les comptes restent aussi visibles dans Netlify : **Projet → Identity** (inscription *sur invitation uniquement*).
 
 ## Utiliser l'admin
 
-- **Actualités** : bouton **+ actualité** pour publier un article (titre, date, image, résumé, texte).
-  Cochez **Brouillon** pour préparer un article sans le publier. Deux modèles sont déjà en brouillon.
-- **Pages du site** : textes des pages Accueil, La section et Nous rejoindre.
-- **Bureau, actions et galerie** : membres du bureau (avec photo), frise des actions, galerie photos.
-- **Coordonnées et réseaux** : numéro WhatsApp du formulaire, téléphone, e-mail, adresse, réseaux sociaux.
+Le menu de gauche regroupe toutes les rubriques :
 
-Après **Publier**, le site se met à jour tout seul en 1 à 2 minutes.
+- **Tableau de bord** : chiffres clés, liste « À compléter », dernières modifications et accès rapides.
+- **Actualités** : **Nouvelle actualité**, puis **Enregistrer le brouillon** (invisible sur le site) ou **Publier**.
+- **Page d'accueil**, **Bureau**, **Actions**, **Galerie photos**, **Textes des pages**, **Coordonnées** : un formulaire par rubrique.
+  Dans la galerie, glissez-déposez plusieurs photos d'un coup ; elles sont réduites automatiquement.
+- Après une modification, la barre du bas propose **Enregistrer et publier**. L'indicateur en haut à droite passe
+  de « Publication en cours… » à « En ligne » quand le site est à jour (1 à 2 minutes).
+
+Chaque enregistrement est conservé dans l'historique du dépôt GitHub et peut être annulé.
 
 ## Voir le site sur son ordinateur
 

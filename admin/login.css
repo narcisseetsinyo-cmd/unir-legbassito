@@ -1,0 +1,122 @@
+/* =====================================================================
+   Écran de connexion de l'espace admin, aux couleurs du site.
+   Connexion par e-mail (Netlify Identity), puis ouverture du tableau de bord.
+   ===================================================================== */
+@font-face{font-family:"Clash Display";src:url("../assets/fonts/ClashDisplay-Variable.woff2") format("woff2");font-weight:200 700;font-display:swap}
+@font-face{font-family:"Outfit";src:url("../assets/fonts/Outfit-Variable.woff2") format("woff2");font-weight:100 900;font-display:swap}
+
+#unir-login{
+  --blue:#1E98D4;--blue-600:#1580B8;--blue-700:#0F6496;--navy:#08263D;--sky:#E8F5FC;--sky-2:#CFEAF8;
+  --ink:#0B2236;--muted:#5B7186;--line:rgba(11,34,54,.12);--ease:cubic-bezier(.2,.8,.2,1);
+  --display:"Clash Display","Outfit",system-ui,sans-serif;--sans:"Outfit",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  position:fixed;inset:0;z-index:2147483000;overflow-y:auto;overflow-x:hidden;color:#fff;font-family:var(--sans);font-weight:400;line-height:1.6;
+  background:radial-gradient(1100px 600px at 85% 15%,#36aee6 0%,transparent 60%),linear-gradient(160deg,var(--blue) 0%,var(--blue-700) 55%,var(--navy) 100%);
+  transition:opacity .5s var(--ease),visibility .5s;-webkit-font-smoothing:antialiased
+}
+#unir-login.gone{opacity:0;visibility:hidden;pointer-events:none}
+#unir-login *,#unir-login *::before,#unir-login *::after{box-sizing:border-box;margin:0;padding:0}
+#unir-login a{color:inherit;text-decoration:none}
+#unir-login button,#unir-login input{font:inherit;color:inherit;border:0;background:none}
+#unir-login #ul-sky{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
+#unir-login .ul-map{position:fixed;right:-8%;top:50%;transform:translateY(-50%);height:118%;opacity:.07;pointer-events:none}
+
+#unir-login .ul-wrap{position:relative;z-index:1;min-height:100%;display:flex;flex-direction:column;width:min(1180px,100% - 32px);margin-inline:auto;padding:22px 0 32px}
+#unir-login .ul-top{display:flex;align-items:center;justify-content:space-between;gap:16px}
+#unir-login .ul-brand{display:flex;align-items:center;gap:12px}
+#unir-login .ul-mark{width:44px;height:44px;border-radius:14px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);display:grid;place-items:center}
+#unir-login .ul-mark img{height:34px;width:auto}
+#unir-login .ul-brand b{display:block;font-family:var(--display);font-weight:600;letter-spacing:.08em;line-height:1.1}
+#unir-login .ul-brand small{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;opacity:.8}
+#unir-login .ul-back{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);font-weight:500;font-size:.9rem;transition:background .3s,color .3s}
+#unir-login .ul-back:hover{background:#fff;color:var(--blue-700)}
+#unir-login .ul-back svg{width:16px;height:16px}
+
+#unir-login .ul-grid{flex:1;display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center;padding:48px 0}
+#unir-login .ul-eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:.78rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;padding:8px 16px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22)}
+#unir-login .ul-eyebrow i{width:8px;height:8px;border-radius:50%;background:#fff;animation:ul-pulse 2s infinite}
+@keyframes ul-pulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,.7)}70%{box-shadow:0 0 0 10px rgba(255,255,255,0)}100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}}
+#unir-login h1{font-family:var(--display);font-weight:700;font-size:clamp(2.4rem,5.4vw,4.4rem);line-height:1.02;letter-spacing:-.02em;word-spacing:.08em;margin:22px 0 18px}
+#unir-login h1 span{display:block;overflow:hidden;padding-bottom:.1em;margin-bottom:-.1em}
+#unir-login h1 span>span{display:inline-block;transform:translateY(110%);transition:transform 1.1s var(--ease)}
+#unir-login.in h1 span>span{transform:none}
+#unir-login h1 span:nth-child(2)>span{transition-delay:.12s}
+#unir-login h1 span:nth-child(3)>span{transition-delay:.24s}
+#unir-login h1 em{font-style:normal;font-weight:300;color:var(--sky-2)}
+#unir-login .ul-lead{max-width:500px;font-weight:300;font-size:1.08rem;opacity:.9}
+#unir-login .ul-feats{list-style:none;display:grid;gap:12px;margin-top:28px;max-width:500px}
+#unir-login .ul-feats li{display:flex;align-items:center;gap:14px;padding:12px 16px;border-radius:16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14)}
+#unir-login .ul-feats .ic{flex:none;width:40px;height:40px;border-radius:12px;background:var(--blue);display:grid;place-items:center;box-shadow:0 10px 22px -10px rgba(0,0,0,.5)}
+#unir-login .ul-feats svg{width:20px;height:20px}
+#unir-login .ul-feats b{display:block;font-family:var(--display);font-weight:600;word-spacing:.1em}
+#unir-login .ul-feats small{font-weight:300;opacity:.85;font-size:.9rem}
+
+/* carte de connexion */
+#unir-login .ul-card{background:#fff;color:var(--ink);border-radius:28px;padding:34px;box-shadow:0 30px 70px -25px rgba(0,0,0,.55);position:relative}
+#unir-login .ul-card-h{display:flex;align-items:center;gap:14px;margin-bottom:22px}
+#unir-login .ul-dove{flex:none;width:56px;height:56px;border-radius:18px;background:linear-gradient(150deg,var(--blue),var(--blue-700));display:grid;place-items:center}
+#unir-login .ul-dove img{height:42px;width:auto}
+#unir-login .ul-card h2{font-family:var(--display);font-weight:600;font-size:1.6rem;line-height:1.1;word-spacing:.1em}
+#unir-login .ul-card-h p{color:var(--muted);font-size:.92rem}
+#unir-login .ul-field{position:relative}
+#unir-login .ul-field+.ul-field{margin-top:12px}
+#unir-login .ul-field input{width:100%;padding:24px 16px 10px 16px;border:1.5px solid var(--line);border-radius:14px;background:#fbfdff;color:var(--ink);font-size:1rem;letter-spacing:.02em;transition:border-color .3s,box-shadow .3s}
+#unir-login .ul-field input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 4px rgba(30,152,212,.15)}
+#unir-login .ul-field label{position:absolute;left:17px;top:17px;color:var(--muted);pointer-events:none;transition:.25s var(--ease)}
+#unir-login .ul-field input:focus+label,#unir-login .ul-field input:not(:placeholder-shown)+label{top:7px;font-size:.72rem;font-weight:600;color:var(--blue)}
+#unir-login .ul-field.pw input{padding-right:52px}
+#unir-login .ul-eye{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:10px;display:grid;place-items:center;color:var(--muted);cursor:pointer}
+#unir-login .ul-eye:hover{background:var(--sky);color:var(--blue-700)}
+#unir-login .ul-eye svg{width:20px;height:20px}
+#unir-login .ul-btn{margin-top:16px;width:100%;display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:15px 24px;border-radius:999px;background:var(--blue);color:#fff;font-weight:600;font-size:1rem;cursor:pointer;box-shadow:0 14px 30px -12px rgba(30,152,212,.9);transition:background .3s,transform .3s var(--ease)}
+#unir-login .ul-btn:hover{background:var(--blue-600);transform:translateY(-2px)}
+#unir-login .ul-btn[disabled]{opacity:.7;cursor:wait;transform:none}
+#unir-login .ul-btn svg{width:18px;height:18px}
+#unir-login .ul-spin{width:18px;height:18px;border-radius:50%;border:2.5px solid rgba(255,255,255,.4);border-top-color:#fff;animation:ul-rot .8s linear infinite}
+@keyframes ul-rot{to{transform:rotate(360deg)}}
+#unir-login .ul-msg{margin-top:14px;padding:12px 14px;border-radius:12px;font-size:.9rem;background:#fdecec;color:#9b1c22;display:none}
+#unir-login .ul-msg.show{display:block}
+#unir-login .ul-note{margin-top:14px;font-size:.84rem;color:var(--muted);display:flex;gap:8px;align-items:flex-start}
+#unir-login .ul-note svg{flex:none;width:16px;height:16px;margin-top:3px;color:var(--blue)}
+
+#unir-login details{margin-top:22px;border-top:1px solid var(--line);padding-top:16px}
+#unir-login summary{cursor:pointer;font-weight:600;color:var(--blue-700);list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px}
+#unir-login summary::-webkit-details-marker{display:none}
+#unir-login summary::after{content:"+";font-family:var(--display);font-size:1.3rem;line-height:1;transition:transform .3s var(--ease)}
+#unir-login details[open] summary::after{transform:rotate(45deg)}
+#unir-login .ul-steps{list-style:none;counter-reset:s;display:grid;gap:12px;margin:16px 0}
+#unir-login .ul-steps li{counter-increment:s;display:flex;gap:12px;font-size:.9rem;color:#33495c}
+#unir-login .ul-steps li::before{content:counter(s);flex:none;width:28px;height:28px;border-radius:9px;background:var(--blue);color:#fff;font-family:var(--display);font-weight:600;font-size:.85rem;display:grid;place-items:center}
+#unir-login .ul-steps b{font-weight:600;color:var(--ink)}
+#unir-login .ul-link{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;background:var(--sky);color:var(--blue-700);font-weight:600;font-size:.9rem;transition:background .3s}
+#unir-login .ul-link:hover{background:var(--sky-2)}
+#unir-login .ul-link svg{width:16px;height:16px}
+
+/* chargement */
+#unir-login .ul-loading{display:flex;flex-direction:column;align-items:center;gap:14px;padding:30px 0 10px;color:var(--muted);font-size:.95rem}
+#unir-login .ul-loading .ul-spin{width:34px;height:34px;border-color:var(--sky-2);border-top-color:var(--blue)}
+#unir-login .ul-view{display:none}
+#unir-login .ul-view.on{display:block}
+
+#unir-login .ul-foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:.82rem;opacity:.75}
+
+#unir-login .ul-fade{opacity:0;transform:translateY(24px);transition:opacity 1s var(--ease),transform 1s var(--ease)}
+#unir-login.in .ul-fade{opacity:1;transform:none}
+#unir-login .d1{transition-delay:.3s}#unir-login .d2{transition-delay:.45s}#unir-login .d3{transition-delay:.6s}
+
+
+#unir-login .ul-row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:14px;font-size:.9rem}
+#unir-login .ul-a{color:var(--blue-700);font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+#unir-login .ul-a:hover{color:var(--blue)}
+#unir-login .ul-ok{margin-top:14px;padding:14px;border-radius:12px;font-size:.92rem;background:var(--sky);color:var(--blue-700);display:flex;gap:10px;align-items:flex-start}
+#unir-login .ul-ok svg{flex:none;width:20px;height:20px;margin-top:1px}
+#unir-login .ul-p{color:#33495c;font-size:.95rem;margin-bottom:16px}
+@media (max-width:900px){
+  #unir-login .ul-grid{grid-template-columns:1fr;gap:34px;padding:34px 0}
+  #unir-login .ul-feats{display:none}
+}
+@media (max-width:520px){
+  #unir-login .ul-card{padding:24px;border-radius:22px}
+  #unir-login .ul-back span{display:none}
+  #unir-login .ul-brand small{display:none}
+}
+@media (prefers-reduced-motion:reduce){#unir-login *{animation:none!important;transition:none!important}#unir-login .ul-fade,#unir-login h1 span>span{opacity:1!important;transform:none!important}}

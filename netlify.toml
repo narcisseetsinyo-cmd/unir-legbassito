@@ -3,6 +3,9 @@
   command = "node tools/build-news-index.mjs"
   publish = "."
 
+[functions]
+  directory = "netlify/functions"
+
 # L'espace admin et le contenu ne doivent pas rester en cache trop longtemps
 [[headers]]
   for = "/content/*"
