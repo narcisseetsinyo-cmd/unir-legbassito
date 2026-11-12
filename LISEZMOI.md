@@ -35,6 +35,9 @@ Le menu de gauche regroupe toutes les rubriques :
 - **Actualités** : **Nouvelle actualité**, puis **Enregistrer le brouillon** (invisible sur le site) ou **Publier**.
 - **Page d'accueil**, **Bureau**, **Actions**, **Galerie photos**, **Textes des pages**, **Coordonnées** : un formulaire par rubrique.
   Dans la galerie, glissez-déposez plusieurs photos d'un coup ; elles sont réduites automatiquement.
+- **Ajuster une photo** : à chaque ajout, un éditeur s'ouvre pour recadrer (format conseillé selon l'emplacement, ou libre),
+  zoomer, pivoter, retourner et régler luminosité, contraste et saturation. Le bouton **Recadrer / ajuster** permet
+  de retoucher plus tard une photo déjà en ligne.
 - Après une modification, la barre du bas propose **Enregistrer et publier**. L'indicateur en haut à droite passe
   de « Publication en cours… » à « En ligne » quand le site est à jour (1 à 2 minutes).
 

@@ -61,6 +61,7 @@ const ICONS = {
   mail: '<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/>',
   key: '<circle cx="7.5" cy="15.5" r="4.5"/><path d="m10.7 12.3 9.8-9.8M17 6l3 3M14 9l2 2"/>',
   clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  crop: '<path d="M6 2v14a2 2 0 0 0 2 2h14"/><path d="M18 22V8a2 2 0 0 0-2-2H2"/>',
   info: '<circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/>'
 };
 const ic = n => `<svg ${P} aria-hidden="true">${ICONS[n] || ''}</svg>`;
@@ -180,22 +181,43 @@ function watchPublish(checks) {
 
 /* ---------- Photos : réduction avant envoi ---------- */
 const pending = {}; // chemin public → { b64, url }
-async function prepareImage(file) {
-  if (!/^image\//.test(file.type)) throw new Error('Ce fichier n\'est pas une image.');
-  const dataUrl = await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(file); });
-  const img = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => rej(new Error('Image illisible.')); i.src = dataUrl; });
-  const max = 1800, k = Math.min(1, max / Math.max(img.width, img.height));
-  const keepPng = file.type === 'image/png' && file.size < 600 * 1024;
-  let out = dataUrl, ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
-  if (!keepPng && (k < 1 || file.size > 450 * 1024 || !/^(jpe?g|png|webp)$/.test(ext))) {
-    const c = document.createElement('canvas'); c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
-    const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(img, 0, 0, c.width, c.height);
-    out = c.toDataURL('image/jpeg', .84); ext = 'jpg';
-  } else if (ext === 'jpeg') ext = 'jpg';
-  const d = new Date(), base = slugify(file.name.replace(/\.[^.]+$/, '')).slice(0, 40);
+// Recadrage conseillé selon l'endroit où la photo s'affiche sur le site
+function aspectFor(path) {
+  if (/^apropos\.photo$/.test(path)) return { aspect: 4 / 4.6, aspectLabel: 'Portrait' };
+  if (/^membres\.\d+\.photo$/.test(path)) return { aspect: 1 / 1.05, aspectLabel: 'Portrait' };
+  if (path === 'image') return { aspect: 16 / 10, aspectLabel: '16:10' };
+  return {};
+}
+function storeImage(dataUrl, name) {
+  const ext = /^data:image\/png/.test(dataUrl) ? 'png' : 'jpg';
+  const d = new Date(), base = slugify(String(name || 'photo').replace(/\.[^.]+$/, '').replace(/-[a-z0-9]{4}$/, '').replace(/^\d{4}-\d{2}-/, '')).slice(0, 40);
   const pub = `/assets/uploads/${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${base}-${Math.random().toString(36).slice(2, 6)}.${ext}`;
-  pending[pub] = { b64: out.split(',')[1], url: out };
+  pending[pub] = { b64: dataUrl.split(',')[1], url: dataUrl };
   return pub;
+}
+// Simple réduction, sans retouche (« Garder telle quelle »)
+async function autoResize(file) {
+  const img = await UNIR_IMG.loadImage(file);
+  const k = Math.min(1, 1800 / Math.max(img.naturalWidth, img.naturalHeight));
+  const ext = (file.name.split('.').pop() || '').toLowerCase();
+  if (k === 1 && file.size < 450 * 1024 && /^(jpe?g|png|webp)$/.test(ext)) return img.src;
+  const c = document.createElement('canvas'); c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
+  const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(img, 0, 0, c.width, c.height);
+  return c.toDataURL('image/jpeg', .84);
+}
+// Ouvre l'éditeur (recadrage, rotation, réglages) puis prépare la photo pour l'envoi. null = annulé.
+async function prepareImage(file, opts = {}) {
+  if (!/^image\//.test(file.type)) throw new Error('Ce fichier n\'est pas une image.');
+  const r = await UNIR_IMG.edit(file, opts);
+  if (!r) return null;
+  return storeImage(r.skip ? await autoResize(file) : r.dataUrl, file.name);
+}
+// Re-cadrer une photo déjà en place (ou ajoutée mais pas encore enregistrée)
+async function reEditImage(value, opts = {}) {
+  const r = await UNIR_IMG.edit(imgUrl(value), { title: 'Recadrer la photo', ...opts });
+  if (!r || r.skip) return null;
+  if (pending[value]) delete pending[value];
+  return storeImage(r.dataUrl, String(value).split('/').pop());
 }
 function pendingFor(text) {
   return Object.keys(pending).filter(p => text.includes(p)).map(p => ({ path: p.replace(/^\//, ''), b64: pending[p].b64 }));
@@ -277,7 +299,7 @@ class Form {
       case 'image': {
         const u = imgUrl(v);
         return wrap(`<div class="img"><div class="pv" style="${u ? `background-image:url('${esc(u)}')` : ''}">${u ? '' : ic('image')}</div>
-          <div class="acts"><button type="button" class="b b-line b-sm" data-a="img" data-p2="${path}">${ic('upload')} ${v ? 'Changer la photo' : 'Choisir une photo'}</button>${v && f.required === false ? `<button type="button" class="b b-ghost b-sm" data-a="imgdel" data-p2="${path}">Retirer</button>` : ''}${pending[v] ? '<span class="new">Nouvelle photo, envoyée à l\'enregistrement</span>' : ''}</div></div>`, false);
+          <div class="acts"><button type="button" class="b b-line b-sm" data-a="img" data-p2="${path}">${ic('upload')} ${v ? 'Changer la photo' : 'Choisir une photo'}</button>${v ? `<button type="button" class="b b-line b-sm" data-a="imgedit" data-p2="${path}">${ic('crop')} Recadrer / ajuster</button>` : ''}${v && f.required === false ? `<button type="button" class="b b-ghost b-sm" data-a="imgdel" data-p2="${path}">Retirer</button>` : ''}${pending[v] ? '<span class="new">Nouvelle photo, envoyée à l\'enregistrement</span>' : ''}</div></div>`, false);
       }
       case 'markdown': {
         const pv = this.mdPreview.has(path);
@@ -355,7 +377,12 @@ class Form {
     if (a === 'chipadd') { const inp = $(`[data-chip="${p}"]`, this.el); const w = inp.value.trim(); if (!w) return inp.focus(); arr.push(w); this.render(); this.onChange(); $(`[data-chip="${p}"]`, this.el).focus(); return; }
     if (a === 'img') {
       const [file] = await pickFiles(false); if (!file) return;
-      try { setP(this.data, p, await prepareImage(file)); this.render(); this.onChange(); } catch (err) { toast(err.message, true); }
+      try { const u = await prepareImage(file, aspectFor(p)); if (u) { setP(this.data, p, u); this.render(); this.onChange(); } } catch (err) { toast(err.message, true); }
+      return;
+    }
+    if (a === 'imgedit') {
+      try { const u = await reEditImage(getP(this.data, p), aspectFor(p)); if (u) { setP(this.data, p, u); this.render(); this.onChange(); toast('Photo recadrée. Enregistrez pour la publier.'); } }
+      catch (err) { toast('Cette photo n\'a pas pu être ouverte : ' + err.message, true); }
       return;
     }
     if (a === 'imgdel') { setP(this.data, p, ''); this.render(); this.onChange(); return; }
@@ -373,7 +400,7 @@ class Form {
     if (m === 'a') { ins = `[${sel || 'texte du lien'}](https://)`; cur = -1; }
     if (m === 'img') {
       const [file] = await pickFiles(false); if (!file) return;
-      try { const u = await prepareImage(file); ins = `\n![${sel || 'photo'}](${u})\n`; } catch (err) { return toast(err.message, true); }
+      try { const u = await prepareImage(file, { title: 'Photo dans le texte' }); if (!u) return; ins = `\n![${sel || 'photo'}](${u})\n`; } catch (err) { return toast(err.message, true); }
     }
     ta.value = v.slice(0, s) + ins + v.slice(en);
     setP(this.data, p, ta.value); autosize(ta); this.onChange();
@@ -573,9 +600,12 @@ async function viewFile(v, r) {
     const d = $('#drop');
     const add = async files => {
       let n = 0;
-      for (const f of files) {
+      const imgs = files.filter(f => /^image\//.test(f.type));
+      if (imgs.length < files.length) toast(`${files.length - imgs.length} fichier(s) ignoré(s) : ce ne sont pas des images.`, true);
+      for (const [k, f] of imgs.entries()) {
         try {
-          const img = await prepareImage(f);
+          const img = await prepareImage(f, imgs.length > 1 ? { step: `Photo ${k + 1} sur ${imgs.length} · ${f.name}`, skipLabel: 'Garder telle quelle' } : { step: f.name });
+          if (!img) continue;
           editor.form.data.photos.unshift({ image: img, titre: f.name.replace(/\.[^.]+$/, '').replace(/[-_]+/g, ' ').replace(/^\w/, c => c.toUpperCase()), categorie: 'Rencontres', format: 'normal', cadrage: 'centre', description: '' });
           n++;
         } catch (e) { toast(`${f.name} : ${e.message}`, true); }
