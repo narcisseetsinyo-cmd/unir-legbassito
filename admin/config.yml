@@ -1,305 +1,605 @@
 # =====================================================================
 #  Espace d'administration du site UNIR · Section Légbassito
-#  Outil : Sveltia CMS (gratuit). Chaque enregistrement crée une mise à jour
-#  sur GitHub, puis le site se republie tout seul en 1 à 2 minutes.
+#  Outil : Decap CMS. Connexion des admins par e-mail (Netlify Identity),
+#  enregistrement des modifications via Git Gateway.
+#  Chaque enregistrement republie le site automatiquement en 1 à 2 minutes.
 # =====================================================================
-
+locale: fr
 backend:
-  name: github
-  repo: narcisseetsinyo-cmd/unir-legbassito   # ← compte GitHub / nom du dépôt
+  name: git-gateway
   branch: main
-  auth_methods: [token]   # connexion par jeton d'accès uniquement
   commit_messages:
-    create: "Admin : ajout de {{slug}}"
-    update: "Admin : mise à jour de {{slug}}"
-    delete: "Admin : suppression de {{slug}}"
-    uploadMedia: "Admin : ajout de l'image {{path}}"
-    deleteMedia: "Admin : suppression de l'image {{path}}"
-
-app_title: Administration · UNIR Légbassito
-logo:
-  src: ../assets/logo.png
-
-# Les photos ajoutées depuis l'admin sont rangées ici
+    create: 'Admin : ajout de {{slug}}'
+    update: 'Admin : mise à jour de {{slug}}'
+    delete: 'Admin : suppression de {{slug}}'
+    uploadMedia: 'Admin : ajout de l''image {{path}}'
+    deleteMedia: 'Admin : suppression de l''image {{path}}'
+logo_url: /assets/logo.png
 media_folder: assets/uploads
 public_folder: /assets/uploads
-
-# ---------------------------------------------------------------------
-#  Fichiers uniques : une page = un formulaire
-# ---------------------------------------------------------------------
-singletons:
-
-  # ---------------- PARAMÈTRES ----------------
-  - name: parametres
-    label: Coordonnées et réseaux
-    icon: settings
-    file: content/site.json
-    fields:
-      - { name: section, label: Nom de la section, widget: string, hint: "Affiché dans l'en-tête et le pied de page (ex. Légbassito)." }
-      - { name: whatsapp, label: Numéro WhatsApp (formulaire d'adhésion), widget: string, hint: "Chiffres uniquement, avec l'indicatif, sans + ni espaces. Exemple : 22890123456" }
-      - { name: telephone, label: Téléphone affiché, widget: string, hint: "Exemple : +228 90 12 34 56" }
-      - { name: email, label: E-mail, widget: string }
-      - { name: adresse, label: Adresse du siège, widget: string }
-      - { name: lien_carte, label: Lien Google Maps, widget: string, required: false }
-      - { name: site_parti, label: Site national du parti, widget: string, required: false }
-      - { name: facebook, label: Page Facebook (lien), widget: string, required: false, hint: "Laisser vide pour masquer l'icône." }
-      - { name: tiktok, label: Compte TikTok (lien), widget: string, required: false }
-      - { name: youtube, label: Chaîne YouTube (lien), widget: string, required: false }
-      - { name: texte_pied, label: Texte du pied de page, widget: text }
-
-  - name: divider_pages
-    divider: true
-
-  # ---------------- PAGE 1 : ACCUEIL ----------------
+collections:
+- name: actualites
+  label: Actualités
+  label_singular: actualité
+  description: Les actualités publiées apparaissent sur la page « Nous rejoindre ». Cochez « Brouillon » pour préparer un article sans le publier.
+  folder: content/actualites
+  format: json
+  extension: json
+  create: true
+  delete: true
+  identifier_field: titre
+  slug: '{{slug}}'
+  summary: '{{titre}} · {{date}}'
+  sortable_fields:
+  - date
+  - titre
+  fields:
+  - name: titre
+    label: Titre
+    widget: string
+  - name: date
+    label: Date
+    widget: datetime
+    format: YYYY-MM-DD
+    time_format: false
+    date_format: DD/MM/YYYY
+    picker_utc: true
+  - name: categorie
+    label: Catégorie
+    widget: select
+    default: Annonce
+    options:
+    - Annonce
+    - Mobilisation
+    - Agenda
+    - Communiqué
+    - Compte rendu
+    - Jeunesse
+    - Femmes
+  - name: image
+    label: Image principale
+    widget: image
+    required: false
+  - name: resume
+    label: Résumé (affiché sur la carte)
+    widget: text
+  - name: corps
+    label: Texte de l'article
+    widget: markdown
+  - name: brouillon
+    label: Brouillon (ne pas publier)
+    widget: boolean
+    default: false
+    required: false
+- name: pages
+  label: Pages du site
+  description: Les textes des 3 pages du site.
+  files:
   - name: accueil
-    label: "Page 1 · Accueil"
-    icon: home
+    label: Page 1 · Accueil
     file: content/accueil.json
     fields:
-      - name: hero
-        label: Grand bandeau d'accueil
-        widget: object
-        fields:
-          - { name: surtitre, label: Petit texte au-dessus du titre, widget: string }
-          - { name: ligne1, label: Titre – ligne 1, widget: string }
-          - { name: accent, label: Titre – ligne 2 (en couleur), widget: string }
-          - { name: ligne3, label: Titre – ligne 3, widget: string }
-          - { name: engagement, label: Texte avant les mots animés, widget: string }
-          - name: mots_animes
-            label: Mots qui s'écrivent tout seuls
-            widget: list
-            field: { name: mot, label: Mot, widget: string }
-          - { name: intro, label: Paragraphe d'introduction, widget: text }
-          - { name: bouton1, label: Bouton principal (vers l'adhésion), widget: string }
-          - { name: bouton2, label: Bouton secondaire (vers les actions), widget: string }
-          - { name: badge1_titre, label: Étiquette flottante 1 – titre, widget: string, required: false }
-          - { name: badge1_texte, label: Étiquette flottante 1 – texte, widget: string, required: false }
-          - { name: badge2_titre, label: Étiquette flottante 2 – titre, widget: string, required: false }
-          - { name: badge2_texte, label: Étiquette flottante 2 – texte, widget: string, required: false }
-      - name: bandeau
-        label: Bande défilante (mots)
+    - name: hero
+      label: Grand bandeau d'accueil
+      widget: object
+      fields:
+      - name: surtitre
+        label: Petit texte au-dessus du titre
+        widget: string
+      - name: ligne1
+        label: Titre – ligne 1
+        widget: string
+      - name: accent
+        label: Titre – ligne 2 (en couleur)
+        widget: string
+      - name: ligne3
+        label: Titre – ligne 3
+        widget: string
+      - name: engagement
+        label: Texte avant les mots animés
+        widget: string
+      - name: mots_animes
+        label: Mots qui s'écrivent tout seuls
         widget: list
-        field: { name: mot, label: Mot, widget: string }
-      - name: apropos
-        label: Section « À propos »
-        widget: object
-        fields:
-          - { name: surtitre, label: Surtitre, widget: string }
-          - { name: titre, label: Titre, widget: string }
-          - { name: accent, label: Fin du titre (en couleur), widget: string }
-          - name: paragraphes
-            label: Paragraphes
-            widget: list
-            field: { name: paragraphe, label: Paragraphe, widget: text }
-          - { name: photo, label: Photo, widget: image, required: false }
-          - { name: photo_texte, label: Description de la photo (accessibilité), widget: string, required: false }
-          - { name: annee, label: Année dans le badge rond, widget: string, required: false }
-          - { name: texte_badge, label: Texte qui tourne autour du badge, widget: string, required: false }
-          - name: faits
-            label: Encadrés d'informations
-            widget: list
-            summary: "{{libelle}} : {{valeur}}"
-            fields:
-              - { name: libelle, label: Libellé, widget: string }
-              - { name: valeur, label: Valeur, widget: string }
-          - { name: bouton, label: Texte du bouton vers le site du parti, widget: string, required: false }
-      - name: chiffres
-        label: Chiffres clés
+        field:
+          name: mot
+          label: Mot
+          widget: string
+      - name: intro
+        label: Paragraphe d'introduction
+        widget: text
+      - name: bouton1
+        label: Bouton principal (vers l'adhésion)
+        widget: string
+      - name: bouton2
+        label: Bouton secondaire (vers les actions)
+        widget: string
+      - name: badge1_titre
+        label: Étiquette flottante 1 – titre
+        widget: string
+        required: false
+      - name: badge1_texte
+        label: Étiquette flottante 1 – texte
+        widget: string
+        required: false
+      - name: badge2_titre
+        label: Étiquette flottante 2 – titre
+        widget: string
+        required: false
+      - name: badge2_texte
+        label: Étiquette flottante 2 – texte
+        widget: string
+        required: false
+    - name: bandeau
+      label: Bande défilante (mots)
+      widget: list
+      field:
+        name: mot
+        label: Mot
+        widget: string
+    - name: apropos
+      label: Section « À propos »
+      widget: object
+      fields:
+      - name: surtitre
+        label: Surtitre
+        widget: string
+      - name: titre
+        label: Titre
+        widget: string
+      - name: accent
+        label: Fin du titre (en couleur)
+        widget: string
+      - name: paragraphes
+        label: Paragraphes
         widget: list
-        summary: "{{valeur}}{{suffixe}} — {{libelle}}"
-        fields:
-          - { name: valeur, label: Nombre, widget: number, value_type: int }
-          - { name: suffixe, label: Signe après le nombre (ex. +), widget: string, required: false }
-          - name: format
-            label: Type de nombre
-            widget: select
-            default: nombre
-            options:
-              - { label: "Nombre (115 400)", value: nombre }
-              - { label: "Année (2012)", value: annee }
-          - { name: libelle, label: Libellé, widget: string }
-      - name: valeurs
-        label: Section « Nos valeurs »
-        widget: object
-        fields:
-          - { name: surtitre, label: Surtitre, widget: string }
-          - { name: titre, label: Titre, widget: string }
-          - { name: accent, label: Fin du titre (en couleur), widget: string }
-          - { name: intro, label: Introduction, widget: text, required: false }
-          - name: liste
-            label: Valeurs
-            widget: list
-            summary: "{{titre}}"
-            fields:
-              - name: icone
-                label: Icône
-                widget: select
-                options:
-                  - { label: Paix (bouclier), value: paix }
-                  - { label: Développement (maison), value: developpement }
-                  - { label: Proximité (personnes), value: proximite }
-                  - { label: Jeunesse (étoile), value: jeunesse }
-                  - { label: Éducation (diplôme), value: education }
-                  - { label: Santé (cœur), value: sante }
-                  - { label: Solidarité (liens), value: solidarite }
-              - { name: titre, label: Titre, widget: string }
-              - { name: texte, label: Texte, widget: text }
-      - name: citations
-        label: Citations (carrousel)
+        field:
+          name: paragraphe
+          label: Paragraphe
+          widget: text
+      - name: photo
+        label: Photo
+        widget: image
+        required: false
+      - name: photo_texte
+        label: Description de la photo (accessibilité)
+        widget: string
+        required: false
+      - name: annee
+        label: Année dans le badge rond
+        widget: string
+        required: false
+      - name: texte_badge
+        label: Texte qui tourne autour du badge
+        widget: string
+        required: false
+      - name: faits
+        label: Encadrés d'informations
         widget: list
-        summary: "{{texte}}"
+        summary: '{{libelle}} : {{valeur}}'
         fields:
-          - { name: texte, label: Citation, widget: text }
-          - { name: auteur, label: Auteur, widget: string }
-          - { name: precision, label: Précision sous l'auteur, widget: string, required: false }
-
-  # ---------------- PAGE 2 : LA SECTION ----------------
+        - name: libelle
+          label: Libellé
+          widget: string
+        - name: valeur
+          label: Valeur
+          widget: string
+      - name: bouton
+        label: Texte du bouton vers le site du parti
+        widget: string
+        required: false
+    - name: chiffres
+      label: Chiffres clés
+      widget: list
+      summary: '{{valeur}}{{suffixe}} — {{libelle}}'
+      fields:
+      - name: valeur
+        label: Nombre
+        widget: number
+        value_type: int
+      - name: suffixe
+        label: Signe après le nombre (ex. +)
+        widget: string
+        required: false
+      - name: format
+        label: Type de nombre
+        widget: select
+        default: nombre
+        options:
+        - label: Nombre (115 400)
+          value: nombre
+        - label: Année (2012)
+          value: annee
+      - name: libelle
+        label: Libellé
+        widget: string
+    - name: valeurs
+      label: Section « Nos valeurs »
+      widget: object
+      fields:
+      - name: surtitre
+        label: Surtitre
+        widget: string
+      - name: titre
+        label: Titre
+        widget: string
+      - name: accent
+        label: Fin du titre (en couleur)
+        widget: string
+      - name: intro
+        label: Introduction
+        widget: text
+        required: false
+      - name: liste
+        label: Valeurs
+        widget: list
+        summary: '{{titre}}'
+        fields:
+        - name: icone
+          label: Icône
+          widget: select
+          options:
+          - label: Paix (bouclier)
+            value: paix
+          - label: Développement (maison)
+            value: developpement
+          - label: Proximité (personnes)
+            value: proximite
+          - label: Jeunesse (étoile)
+            value: jeunesse
+          - label: Éducation (diplôme)
+            value: education
+          - label: Santé (cœur)
+            value: sante
+          - label: Solidarité (liens)
+            value: solidarite
+        - name: titre
+          label: Titre
+          widget: string
+        - name: texte
+          label: Texte
+          widget: text
+    - name: citations
+      label: Citations (carrousel)
+      widget: list
+      summary: '{{texte}}'
+      fields:
+      - name: texte
+        label: Citation
+        widget: text
+      - name: auteur
+        label: Auteur
+        widget: string
+      - name: precision
+        label: Précision sous l'auteur
+        widget: string
+        required: false
   - name: section
-    label: "Page 2 · La section (titres)"
-    icon: groups
+    label: Page 2 · La section (titres)
     file: content/section.json
     fields:
-      - name: entete
-        label: Bandeau du haut de page
-        widget: object
-        fields: &entete
-          - { name: surtitre, label: Surtitre, widget: string }
-          - { name: titre, label: Titre, widget: string }
-          - { name: accent, label: Fin du titre (en couleur), widget: string }
-          - { name: intro, label: Introduction, widget: text, required: false }
-      - { name: bureau, label: Titres de la partie Bureau, widget: object, fields: *entete }
-      - { name: actions, label: Titres de la partie Actions, widget: object, fields: *entete }
-      - { name: galerie, label: Titres de la partie Galerie, widget: object, fields: *entete }
-
-  - name: bureau
-    label: "Page 2 · Membres du bureau"
-    icon: badge
-    file: content/bureau.json
-    fields:
-      - name: membres
-        label: Membres
-        label_singular: membre
-        widget: list
-        summary: "{{nom}} — {{fonction}}"
-        fields:
-          - { name: nom, label: Nom et prénom, widget: string }
-          - { name: fonction, label: Fonction, widget: string }
-          - { name: photo, label: Photo (portrait), widget: image, required: false, hint: "Sans photo, les initiales s'affichent." }
-          - { name: facebook, label: Lien Facebook, widget: string, required: false }
-          - { name: whatsapp, label: Numéro WhatsApp, widget: string, required: false, hint: "Chiffres uniquement, avec l'indicatif. Exemple : 22890123456" }
-
-  - name: actions
-    label: "Page 2 · Actions (frise)"
-    icon: timeline
-    file: content/actions.json
-    fields:
-      - name: liste
-        label: Actions
-        label_singular: action
-        widget: list
-        add_to_top: true
-        summary: "{{date}} — {{titre}}"
-        fields:
-          - { name: date, label: Date, widget: string, hint: "Texte libre. Exemple : 12 mars 2026, ou Mars 2026" }
-          - { name: titre, label: Titre, widget: string }
-          - { name: texte, label: Description, widget: text }
-          - { name: etiquette, label: Étiquette, widget: string, required: false, hint: "Exemple : Jeunesse, Femmes, Action citoyenne" }
-
-  - name: galerie
-    label: "Page 2 · Galerie photos"
-    icon: photo_library
-    file: content/galerie.json
-    fields:
-      - name: photos
-        label: Photos
-        label_singular: photo
-        widget: list
-        add_to_top: true
-        summary: "{{titre}} ({{categorie}})"
-        thumbnail: image
-        fields:
-          - { name: image, label: Photo, widget: image }
-          - { name: titre, label: Légende, widget: string }
-          - name: categorie
-            label: Catégorie (filtre)
-            widget: select
-            options: [Rencontres, Jeunesse, Femmes, Actions sociales, Mobilisation, Autre]
-          - name: format
-            label: Taille dans la grille
-            widget: select
-            default: normal
-            options:
-              - { label: Normale (1 case), value: normal }
-              - { label: Large (2 cases en largeur), value: large }
-              - { label: Grande (2 × 2 cases), value: grand }
-              - { label: Pleine largeur, value: pleine }
-          - name: cadrage
-            label: Partie de la photo à garder visible
-            widget: select
-            default: centre
-            options:
-              - { label: Haut, value: haut }
-              - { label: Centre, value: centre }
-              - { label: Bas, value: bas }
-          - { name: description, label: Description (accessibilité), widget: string, required: false }
-
-  # ---------------- PAGE 3 : NOUS REJOINDRE ----------------
+    - name: entete
+      label: Bandeau du haut de page
+      widget: object
+      fields:
+      - name: surtitre
+        label: Surtitre
+        widget: string
+      - name: titre
+        label: Titre
+        widget: string
+      - name: accent
+        label: Fin du titre (en couleur)
+        widget: string
+      - name: intro
+        label: Introduction
+        widget: text
+        required: false
+    - name: bureau
+      label: Titres de la partie Bureau
+      widget: object
+      fields:
+      - name: surtitre
+        label: Surtitre
+        widget: string
+      - name: titre
+        label: Titre
+        widget: string
+      - name: accent
+        label: Fin du titre (en couleur)
+        widget: string
+      - name: intro
+        label: Introduction
+        widget: text
+        required: false
+    - name: actions
+      label: Titres de la partie Actions
+      widget: object
+      fields:
+      - name: surtitre
+        label: Surtitre
+        widget: string
+      - name: titre
+        label: Titre
+        widget: string
+      - name: accent
+        label: Fin du titre (en couleur)
+        widget: string
+      - name: intro
+        label: Introduction
+        widget: text
+        required: false
+    - name: galerie
+      label: Titres de la partie Galerie
+      widget: object
+      fields:
+      - name: surtitre
+        label: Surtitre
+        widget: string
+      - name: titre
+        label: Titre
+        widget: string
+      - name: accent
+        label: Fin du titre (en couleur)
+        widget: string
+      - name: intro
+        label: Introduction
+        widget: text
+        required: false
   - name: rejoindre
-    label: "Page 3 · Nous rejoindre"
-    icon: how_to_reg
+    label: Page 3 · Nous rejoindre
     file: content/rejoindre.json
     fields:
-      - { name: entete, label: Bandeau du haut de page, widget: object, fields: *entete }
-      - { name: actualites, label: Titres de la partie Actualités, widget: object, fields: *entete }
-      - name: adhesion
-        label: Partie Adhésion
-        widget: object
+    - name: entete
+      label: Bandeau du haut de page
+      widget: object
+      fields:
+      - name: surtitre
+        label: Surtitre
+        widget: string
+      - name: titre
+        label: Titre
+        widget: string
+      - name: accent
+        label: Fin du titre (en couleur)
+        widget: string
+      - name: intro
+        label: Introduction
+        widget: text
+        required: false
+    - name: actualites
+      label: Titres de la partie Actualités
+      widget: object
+      fields:
+      - name: surtitre
+        label: Surtitre
+        widget: string
+      - name: titre
+        label: Titre
+        widget: string
+      - name: accent
+        label: Fin du titre (en couleur)
+        widget: string
+      - name: intro
+        label: Introduction
+        widget: text
+        required: false
+    - name: adhesion
+      label: Partie Adhésion
+      widget: object
+      fields:
+      - name: surtitre
+        label: Surtitre
+        widget: string
+      - name: titre
+        label: Titre
+        widget: string
+      - name: accent
+        label: Fin du titre (en couleur)
+        widget: string
+      - name: intro
+        label: Introduction
+        widget: text
+      - name: etapes
+        label: Étapes
+        widget: list
+        summary: '{{titre}}'
         fields:
-          - { name: surtitre, label: Surtitre, widget: string }
-          - { name: titre, label: Titre, widget: string }
-          - { name: accent, label: Fin du titre (en couleur), widget: string }
-          - { name: intro, label: Introduction, widget: text }
-          - name: etapes
-            label: Étapes
-            widget: list
-            summary: "{{titre}}"
-            fields:
-              - { name: titre, label: Titre, widget: string }
-              - { name: texte, label: Texte, widget: string }
-          - name: choix
-            label: Choix « Votre demande » du formulaire
-            widget: list
-            field: { name: choix, label: Choix, widget: string }
-          - { name: note, label: Note sous le bouton, widget: string, required: false }
-      - { name: contact, label: Titres de la partie Contact, widget: object, fields: *entete }
-
-# ---------------------------------------------------------------------
-#  Publications : une actualité = un fichier
-# ---------------------------------------------------------------------
-collections:
-  - name: actualites
-    label: Actualités
-    label_singular: actualité
-    icon: newspaper
-    description: "Les actualités publiées apparaissent sur la page « Nous rejoindre ». Cochez « Brouillon » pour préparer un article sans le publier."
-    folder: content/actualites
-    format: json
-    extension: json
-    create: true
-    delete: true
-    identifier_field: titre
-    slug: "{{slug}}"
-    summary: "{{titre}} · {{date}}"
-    sortable_fields: [date, titre]
+        - name: titre
+          label: Titre
+          widget: string
+        - name: texte
+          label: Texte
+          widget: string
+      - name: choix
+        label: Choix « Votre demande » du formulaire
+        widget: list
+        field:
+          name: choix
+          label: Choix
+          widget: string
+      - name: note
+        label: Note sous le bouton
+        widget: string
+        required: false
+    - name: contact
+      label: Titres de la partie Contact
+      widget: object
+      fields:
+      - name: surtitre
+        label: Surtitre
+        widget: string
+      - name: titre
+        label: Titre
+        widget: string
+      - name: accent
+        label: Fin du titre (en couleur)
+        widget: string
+      - name: intro
+        label: Introduction
+        widget: text
+        required: false
+- name: equipe
+  label: Bureau, actions et galerie
+  description: Le contenu de la page « La section ».
+  files:
+  - name: bureau
+    label: Membres du bureau
+    file: content/bureau.json
     fields:
-      - { name: titre, label: Titre, widget: string }
-      - { name: date, label: Date, widget: datetime, format: YYYY-MM-DD, time_format: false }
+    - name: membres
+      label: Membres
+      label_singular: membre
+      widget: list
+      summary: '{{nom}} — {{fonction}}'
+      fields:
+      - name: nom
+        label: Nom et prénom
+        widget: string
+      - name: fonction
+        label: Fonction
+        widget: string
+      - name: photo
+        label: Photo (portrait)
+        widget: image
+        required: false
+        hint: Sans photo, les initiales s'affichent.
+      - name: facebook
+        label: Lien Facebook
+        widget: string
+        required: false
+      - name: whatsapp
+        label: Numéro WhatsApp
+        widget: string
+        required: false
+        hint: 'Chiffres uniquement, avec l''indicatif. Exemple : 22890123456'
+  - name: actions
+    label: Actions (frise)
+    file: content/actions.json
+    fields:
+    - name: liste
+      label: Actions
+      label_singular: action
+      widget: list
+      add_to_top: true
+      summary: '{{date}} — {{titre}}'
+      fields:
+      - name: date
+        label: Date
+        widget: string
+        hint: 'Texte libre. Exemple : 12 mars 2026, ou Mars 2026'
+      - name: titre
+        label: Titre
+        widget: string
+      - name: texte
+        label: Description
+        widget: text
+      - name: etiquette
+        label: Étiquette
+        widget: string
+        required: false
+        hint: 'Exemple : Jeunesse, Femmes, Action citoyenne'
+  - name: galerie
+    label: Galerie photos
+    file: content/galerie.json
+    fields:
+    - name: photos
+      label: Photos
+      label_singular: photo
+      widget: list
+      add_to_top: true
+      summary: '{{titre}} ({{categorie}})'
+      fields:
+      - name: image
+        label: Photo
+        widget: image
+      - name: titre
+        label: Légende
+        widget: string
       - name: categorie
-        label: Catégorie
+        label: Catégorie (filtre)
         widget: select
-        default: Annonce
-        options: [Annonce, Mobilisation, Agenda, Communiqué, Compte rendu, Jeunesse, Femmes]
-      - { name: image, label: Image principale, widget: image, required: false }
-      - { name: resume, label: Résumé (affiché sur la carte), widget: text }
-      - { name: corps, label: Texte de l'article, widget: markdown }
-      - { name: brouillon, label: Brouillon (ne pas publier), widget: boolean, default: false, required: false }
+        options:
+        - Rencontres
+        - Jeunesse
+        - Femmes
+        - Actions sociales
+        - Mobilisation
+        - Autre
+      - name: format
+        label: Taille dans la grille
+        widget: select
+        default: normal
+        options:
+        - label: Normale (1 case)
+          value: normal
+        - label: Large (2 cases en largeur)
+          value: large
+        - label: Grande (2 × 2 cases)
+          value: grand
+        - label: Pleine largeur
+          value: pleine
+      - name: cadrage
+        label: Partie de la photo à garder visible
+        widget: select
+        default: centre
+        options:
+        - label: Haut
+          value: haut
+        - label: Centre
+          value: centre
+        - label: Bas
+          value: bas
+      - name: description
+        label: Description (accessibilité)
+        widget: string
+        required: false
+- name: reglages
+  label: Coordonnées et réseaux
+  files:
+  - name: parametres
+    label: Coordonnées et réseaux
+    file: content/site.json
+    fields:
+    - name: section
+      label: Nom de la section
+      widget: string
+      hint: Affiché dans l'en-tête et le pied de page (ex. Légbassito).
+    - name: whatsapp
+      label: Numéro WhatsApp (formulaire d'adhésion)
+      widget: string
+      hint: 'Chiffres uniquement, avec l''indicatif, sans + ni espaces. Exemple : 22890123456'
+    - name: telephone
+      label: Téléphone affiché
+      widget: string
+      hint: 'Exemple : +228 90 12 34 56'
+    - name: email
+      label: E-mail
+      widget: string
+    - name: adresse
+      label: Adresse du siège
+      widget: string
+    - name: lien_carte
+      label: Lien Google Maps
+      widget: string
+      required: false
+    - name: site_parti
+      label: Site national du parti
+      widget: string
+      required: false
+    - name: facebook
+      label: Page Facebook (lien)
+      widget: string
+      required: false
+      hint: Laisser vide pour masquer l'icône.
+    - name: tiktok
+      label: Compte TikTok (lien)
+      widget: string
+      required: false
+    - name: youtube
+      label: Chaîne YouTube (lien)
+      widget: string
+      required: false
+    - name: texte_pied
+      label: Texte du pied de page
+      widget: text

@@ -9,7 +9,7 @@
 <style>
 /* =====================================================================
    Écran de connexion de l'espace admin, aux couleurs du site.
-   Il se superpose à l'écran de Sveltia CMS et lui transmet le jeton.
+   Connexion par e-mail (Netlify Identity), puis ouverture de Decap CMS.
    ===================================================================== */
 @font-face{font-family:"Clash Display";src:url("../assets/fonts/ClashDisplay-Variable.woff2") format("woff2");font-weight:200 700;font-display:swap}
 @font-face{font-family:"Outfit";src:url("../assets/fonts/Outfit-Variable.woff2") format("woff2");font-weight:100 900;font-display:swap}
@@ -67,10 +67,12 @@
 #unir-login .ul-card h2{font-family:var(--display);font-weight:600;font-size:1.6rem;line-height:1.1;word-spacing:.1em}
 #unir-login .ul-card-h p{color:var(--muted);font-size:.92rem}
 #unir-login .ul-field{position:relative}
-#unir-login .ul-field input{width:100%;padding:24px 52px 10px 16px;border:1.5px solid var(--line);border-radius:14px;background:#fbfdff;color:var(--ink);font-size:1rem;letter-spacing:.02em;transition:border-color .3s,box-shadow .3s}
+#unir-login .ul-field+.ul-field{margin-top:12px}
+#unir-login .ul-field input{width:100%;padding:24px 16px 10px 16px;border:1.5px solid var(--line);border-radius:14px;background:#fbfdff;color:var(--ink);font-size:1rem;letter-spacing:.02em;transition:border-color .3s,box-shadow .3s}
 #unir-login .ul-field input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 4px rgba(30,152,212,.15)}
 #unir-login .ul-field label{position:absolute;left:17px;top:17px;color:var(--muted);pointer-events:none;transition:.25s var(--ease)}
 #unir-login .ul-field input:focus+label,#unir-login .ul-field input:not(:placeholder-shown)+label{top:7px;font-size:.72rem;font-weight:600;color:var(--blue)}
+#unir-login .ul-field.pw input{padding-right:52px}
 #unir-login .ul-eye{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:10px;display:grid;place-items:center;color:var(--muted);cursor:pointer}
 #unir-login .ul-eye:hover{background:var(--sky);color:var(--blue-700)}
 #unir-login .ul-eye svg{width:20px;height:20px}
@@ -101,7 +103,8 @@
 /* chargement */
 #unir-login .ul-loading{display:flex;flex-direction:column;align-items:center;gap:14px;padding:30px 0 10px;color:var(--muted);font-size:.95rem}
 #unir-login .ul-loading .ul-spin{width:34px;height:34px;border-color:var(--sky-2);border-top-color:var(--blue)}
-#unir-login[data-state="loading"] .ul-form,#unir-login:not([data-state="loading"]) .ul-loading{display:none}
+#unir-login .ul-view{display:none}
+#unir-login .ul-view.on{display:block}
 
 #unir-login .ul-foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:.82rem;opacity:.75}
 
@@ -109,10 +112,13 @@
 #unir-login.in .ul-fade{opacity:1;transform:none}
 #unir-login .d1{transition-delay:.3s}#unir-login .d2{transition-delay:.45s}#unir-login .d3{transition-delay:.6s}
 
-/* Pendant la connexion automatique, la fenêtre de Sveltia reste invisible */
-html.unir-busy dialog.sui.modal{opacity:0!important;pointer-events:none!important}
-html.unir-busy dialog.sui.modal::backdrop{opacity:0!important}
 
+#unir-login .ul-row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:14px;font-size:.9rem}
+#unir-login .ul-a{color:var(--blue-700);font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+#unir-login .ul-a:hover{color:var(--blue)}
+#unir-login .ul-ok{margin-top:14px;padding:14px;border-radius:12px;font-size:.92rem;background:var(--sky);color:var(--blue-700);display:flex;gap:10px;align-items:flex-start}
+#unir-login .ul-ok svg{flex:none;width:20px;height:20px;margin-top:1px}
+#unir-login .ul-p{color:#33495c;font-size:.95rem;margin-bottom:16px}
 @media (max-width:900px){
   #unir-login .ul-grid{grid-template-columns:1fr;gap:34px;padding:34px 0}
   #unir-login .ul-feats{display:none}
@@ -124,10 +130,11 @@ html.unir-busy dialog.sui.modal::backdrop{opacity:0!important}
 }
 @media (prefers-reduced-motion:reduce){#unir-login *{animation:none!important;transition:none!important}#unir-login .ul-fade,#unir-login h1 span>span{opacity:1!important;transform:none!important}}
 </style>
+
 </head>
 <body>
 
-<div id="unir-login" data-state="loading" role="dialog" aria-modal="true" aria-labelledby="ul-title">
+<div id="unir-login" role="dialog" aria-modal="true" aria-labelledby="ul-title">
   <canvas id="ul-sky"></canvas>
   <img class="ul-map" src="../assets/logo-blanc.png" alt="" aria-hidden="true">
   <div class="ul-wrap">
@@ -147,7 +154,7 @@ html.unir-busy dialog.sui.modal::backdrop{opacity:0!important}
           <span><span><em>de la section,</em></span></span>
           <span><span>en toute simplicité.</span></span>
         </h1>
-        <p class="ul-lead ul-fade d1">Réservé aux responsables de la section UNIR de Légbassito. Connectez-vous pour mettre le site à jour.</p>
+        <p class="ul-lead ul-fade d1">Réservé aux responsables de la section UNIR de Légbassito. Connectez-vous avec votre adresse e-mail pour mettre le site à jour.</p>
         <ul class="ul-feats ul-fade d2">
           <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span><span><b>Modifier les textes</b><small>Accueil, bureau, actions, coordonnées…</small></span></li>
           <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h14a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v4"/><path d="M14 2v5h5M3 15h6M6 12v6"/></svg></span><span><b>Publier des actualités</b><small>Annonces, comptes rendus, agenda</small></span></li>
@@ -158,139 +165,193 @@ html.unir-busy dialog.sui.modal::backdrop{opacity:0!important}
       <div class="ul-card ul-fade d3">
         <div class="ul-card-h">
           <span class="ul-dove"><img src="../assets/logo-blanc.png" alt=""></span>
-          <div><h2>Connexion</h2><p>Avec votre jeton d'accès GitHub</p></div>
+          <div><h2 id="ul-h">Connexion</h2><p id="ul-hp">Avec votre adresse e-mail</p></div>
         </div>
 
-        <div class="ul-loading" aria-live="polite"><span class="ul-spin"></span>Chargement de l'espace admin…</div>
+        <!-- Chargement -->
+        <div class="ul-view ul-loading" data-view="loading" aria-live="polite"><span class="ul-spin"></span><span id="ul-loading-txt">Chargement…</span></div>
 
-        <form class="ul-form" id="ul-form" novalidate>
-          <div class="ul-field">
-            <input id="ul-token" type="password" placeholder=" " autocomplete="off" spellcheck="false" required>
-            <label for="ul-token">Jeton d'accès</label>
-            <button type="button" class="ul-eye" id="ul-eye" aria-label="Afficher le jeton"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
-          </div>
-          <button class="ul-btn" type="submit" id="ul-submit">Se connecter <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-          <p class="ul-msg" id="ul-msg" role="alert"></p>
-          <p class="ul-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Le jeton reste dans ce navigateur. Vous n'aurez pas à le recoller à chaque visite.</p>
+        <!-- Connexion -->
+        <form class="ul-view" data-view="login" novalidate>
+          <div class="ul-field"><input id="ul-email" name="email" type="email" placeholder=" " autocomplete="username" required><label for="ul-email">Adresse e-mail</label></div>
+          <div class="ul-field pw"><input id="ul-pw" name="password" type="password" placeholder=" " autocomplete="current-password" required><label for="ul-pw">Mot de passe</label><button type="button" class="ul-eye" aria-label="Afficher le mot de passe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+          <button class="ul-btn" type="submit">Se connecter <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          <p class="ul-msg" role="alert"></p>
+          <div class="ul-row"><a class="ul-a" data-go="forgot">Mot de passe oublié ?</a></div>
+          <p class="ul-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Accès réservé aux responsables invités par la section. Vous recevez votre invitation par e-mail.</p>
+        </form>
 
-          <details>
-            <summary>Je n'ai pas encore de jeton</summary>
-            <ol class="ul-steps">
-              <li><span>Ouvrez la page de création de jeton GitHub (bouton ci-dessous), connecté à votre compte.</span></li>
-              <li><span><b>Repository access</b> : choisissez <b>Only select repositories</b>, puis <b>unir-legbassito</b>.</span></li>
-              <li><span><b>Permissions → Contents</b> : <b>Read and write</b>. Cliquez sur <b>Generate token</b>, copiez-le et collez-le ci-dessus.</span></li>
-            </ol>
-            <a class="ul-link" href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Créer mon jeton sur GitHub <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
-          </details>
+        <!-- Mot de passe oublié -->
+        <form class="ul-view" data-view="forgot" novalidate>
+          <p class="ul-p">Indiquez votre adresse e-mail : vous recevrez un lien pour choisir un nouveau mot de passe.</p>
+          <div class="ul-field"><input id="ul-email2" type="email" placeholder=" " autocomplete="username" required><label for="ul-email2">Adresse e-mail</label></div>
+          <button class="ul-btn" type="submit">Recevoir le lien <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          <p class="ul-msg" role="alert"></p>
+          <div class="ul-ok" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Si un compte existe pour cette adresse, un e-mail vient d'être envoyé. Ouvrez-le et cliquez sur le lien (pensez à regarder dans les courriers indésirables).</span></div>
+          <div class="ul-row"><a class="ul-a" data-go="login">← Retour à la connexion</a></div>
+        </form>
+
+        <!-- Invitation : création du mot de passe -->
+        <form class="ul-view" data-view="invite" novalidate>
+          <p class="ul-p">Vous avez été invité·e à administrer le site. Choisissez votre mot de passe pour activer votre compte.</p>
+          <div class="ul-field pw"><input id="ul-new1" type="password" placeholder=" " autocomplete="new-password" required><label for="ul-new1">Mot de passe (8 caractères minimum)</label><button type="button" class="ul-eye" aria-label="Afficher le mot de passe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+          <div class="ul-field pw"><input id="ul-new2" type="password" placeholder=" " autocomplete="new-password" required><label for="ul-new2">Confirmez le mot de passe</label><button type="button" class="ul-eye" aria-label="Afficher le mot de passe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+          <button class="ul-btn" type="submit">Activer mon compte <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          <p class="ul-msg" role="alert"></p>
+        </form>
+
+        <!-- Récupération : nouveau mot de passe -->
+        <form class="ul-view" data-view="reset" novalidate>
+          <p class="ul-p">Choisissez votre nouveau mot de passe.</p>
+          <div class="ul-field pw"><input id="ul-new3" type="password" placeholder=" " autocomplete="new-password" required><label for="ul-new3">Nouveau mot de passe (8 caractères minimum)</label><button type="button" class="ul-eye" aria-label="Afficher le mot de passe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+          <div class="ul-field pw"><input id="ul-new4" type="password" placeholder=" " autocomplete="new-password" required><label for="ul-new4">Confirmez le mot de passe</label><button type="button" class="ul-eye" aria-label="Afficher le mot de passe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+          <button class="ul-btn" type="submit">Enregistrer <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          <p class="ul-msg" role="alert"></p>
         </form>
       </div>
     </div>
 
-    <div class="ul-foot">
-      <span>© UNIR · Section Légbassito</span>
-    </div>
+    <div class="ul-foot"><span>© UNIR · Section Légbassito</span></div>
   </div>
 </div>
 
+<script src="../assets/vendor/gotrue.js"></script>
 <script>
 (() => {
   'use strict';
   const root = document.getElementById('unir-login');
-  const form = document.getElementById('ul-form');
-  const input = document.getElementById('ul-token');
-  const msg = document.getElementById('ul-msg');
-  const submitBtn = document.getElementById('ul-submit');
-  const btnHTML = submitBtn.innerHTML;
-  const sleep = ms => new Promise(r => setTimeout(r, ms));
-  const waitFor = async (fn, ms) => { const end = Date.now() + ms; while (Date.now() < end) { const v = fn(); if (v) return v; await sleep(120); } return null; };
+  const $ = (s, c = document) => c.querySelector(s);
+  const $$ = (s, c = document) => [...c.querySelectorAll(s)];
+  const GoTrueClass = window.GoTrue && (window.GoTrue.default || window.GoTrue);
+  const auth = GoTrueClass ? new GoTrueClass({ APIUrl: location.origin + '/.netlify/identity', setCookie: false }) : null;
+  const STORE = 'gotrue.user';
+  const loggedIn = () => { try { return !!localStorage.getItem(STORE); } catch (e) { return false; } };
+  // Indique à Decap CMS qu'une session existe : il la reprend au chargement
+  const markDecap = () => { try { localStorage.setItem('decap-cms-user', JSON.stringify({ backendName: 'git-gateway' })); } catch (e) {} };
+  const TITLES = {
+    loading: ['Connexion', 'Un instant…'],
+    login: ['Connexion', 'Avec votre adresse e-mail'],
+    forgot: ['Mot de passe oublié', 'Recevez un lien par e-mail'],
+    invite: ['Bienvenue !', 'Activation de votre compte admin'],
+    reset: ['Nouveau mot de passe', 'Sécurisez votre compte']
+  };
+  let view = 'loading', flow = false;
 
-  // Éléments de Sveltia CMS
-  const shell = () => document.querySelector('.sui.app-shell');
-  const tokenBtn = () => [...document.querySelectorAll('.sui.app-shell button')].find(b => /jeton|token/i.test(b.textContent));
-  const dialog = () => document.querySelector('dialog.sui.modal[open]');
-
-  let busy = false, manual = false, lastSignin = 0;
-  const t0 = Date.now();
-
-  // L'écran s'affiche tant que Sveltia demande une connexion ; il disparaît une fois connecté
-  function sync() {
-    if (manual) return;
-    const signin = !!tokenBtn();
-    if (signin) lastSignin = Date.now();
-    if (signin && root.dataset.state === 'loading') { root.dataset.state = 'ready'; setTimeout(() => input.focus(), 400); }
-    const booting = !shell() && Date.now() - t0 < 15000;
-    const show = busy || signin || booting || (Date.now() - lastSignin < 1500);
-    root.classList.toggle('gone', !show);
-    document.documentElement.style.overflow = show ? 'hidden' : '';
+  function show(v, loadingText) {
+    view = v;
+    $$('.ul-view', root).forEach(el => el.classList.toggle('on', el.dataset.view === v));
+    $('#ul-h').textContent = TITLES[v][0]; $('#ul-hp').textContent = TITLES[v][1];
+    if (loadingText) $('#ul-loading-txt').textContent = loadingText;
+    $$('.ul-msg', root).forEach(m => m.classList.remove('show'));
+    const first = $('.ul-view.on input', root); if (first) setTimeout(() => first.focus(), 300);
+    setVisible(true);
   }
-  new MutationObserver(sync).observe(document.body, { childList: true, subtree: true });
-  setInterval(sync, 500);
+  function setVisible(on) {
+    root.classList.toggle('gone', !on);
+    document.documentElement.style.overflow = on ? 'hidden' : '';
+  }
+  function error(form, text) { const m = $('.ul-msg', form); m.textContent = text; m.classList.add('show'); }
+  function busy(form, on, label) {
+    const b = $('.ul-btn', form);
+    if (on) { b.dataset.html = b.innerHTML; b.disabled = true; b.innerHTML = '<span class="ul-spin"></span> ' + (label || 'Patientez…'); }
+    else { b.disabled = false; if (b.dataset.html) b.innerHTML = b.dataset.html; }
+  }
+  // Traduction des erreurs du service de connexion
+  function fr(err) {
+    const t = String((err && (err.json && (err.json.error_description || err.json.msg || err.json.error))) || (err && err.message) || '');
+    if (/no user found|invalid password|invalid_grant|password invalid/i.test(t)) return 'Adresse e-mail ou mot de passe incorrect.';
+    if (/not confirmed/i.test(t)) return 'Ce compte n\'est pas encore activé : ouvrez le lien reçu par e-mail.';
+    if (/token|not found|expired/i.test(t)) return 'Ce lien n\'est plus valide. Demandez un nouveau lien ou une nouvelle invitation.';
+    if (/password/i.test(t) && /short|length|weak/i.test(t)) return 'Mot de passe trop court : 8 caractères minimum.';
+    if (/fetch|network|failed/i.test(t)) return 'Connexion au service impossible. Vérifiez votre connexion Internet puis réessayez.';
+    return 'Une erreur est survenue. Réessayez dans un instant.' + (t ? ' (' + t + ')' : '');
+  }
+  const enterAdmin = () => { markDecap(); show('loading', 'Ouverture de l\'espace admin…'); location.replace(location.pathname); };
+  const checkPw = (a, b) => a.length < 8 ? 'Le mot de passe doit contenir au moins 8 caractères.' : (a !== b ? 'Les deux mots de passe ne sont pas identiques.' : '');
+
+  // Liens reçus par e-mail : invitation, récupération, confirmation
+  const params = new URLSearchParams(location.hash.slice(1));
+  const tokenType = ['invite_token', 'recovery_token', 'confirmation_token'].find(k => params.get(k));
+  const token = tokenType && params.get(tokenType);
+  if (tokenType || params.get('error_description')) history.replaceState(null, '', location.pathname);
+
+  if (!auth) {
+    show('login'); error($('[data-view=login]'), 'Le service de connexion n\'a pas pu être chargé. Rechargez la page.');
+  } else if (tokenType === 'invite_token') {
+    flow = true; show('invite');
+  } else if (tokenType === 'recovery_token') {
+    flow = true; show('loading', 'Vérification du lien…');
+    auth.recover(token, true).then(() => show('reset')).catch(err => { flow = false; show('login'); error($('[data-view=login]'), fr(err)); });
+  } else if (tokenType === 'confirmation_token') {
+    flow = true; show('loading', 'Activation du compte…');
+    auth.confirm(token, true).then(enterAdmin).catch(err => { flow = false; show('login'); error($('[data-view=login]'), fr(err)); });
+  } else if (loggedIn()) {
+    markDecap();
+    setVisible(false);          // déjà connecté : l'outil d'administration s'ouvre directement
+  } else {
+    show('login');
+  }
   requestAnimationFrame(() => root.classList.add('in'));
 
-  function fail(text) {
-    document.documentElement.classList.remove('unir-busy');
-    busy = false;
-    submitBtn.disabled = false; submitBtn.innerHTML = btnHTML;
-    msg.textContent = text; msg.classList.add('show');
-    input.focus(); input.select();
-  }
-
-  form.addEventListener('submit', async e => {
-    e.preventDefault();
-    const token = input.value.trim();
-    msg.classList.remove('show');
-    if (!token) { fail('Collez votre jeton d\'accès dans le champ ci-dessus.'); return; }
-    busy = true;
-    submitBtn.disabled = true; submitBtn.innerHTML = '<span class="ul-spin"></span> Connexion…';
-    document.documentElement.classList.add('unir-busy');
-
-    const b = tokenBtn();
-    if (!b) { fail('L\'espace admin n\'est pas prêt. Rechargez la page et réessayez.'); return; }
-    b.click();
-    const field = await waitFor(() => { const d = dialog(); return d && d.querySelector('input'); }, 5000);
-    if (!field) { fail('La connexion n\'a pas pu démarrer. Rechargez la page et réessayez.'); return; }
-
-    // Transmet le jeton au champ de Sveltia
-    Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(field, token);
-    field.dispatchEvent(new Event('input', { bubbles: true }));
-    field.dispatchEvent(new Event('change', { bubbles: true }));
-    await sleep(200);
-    const d = dialog();
-    const ok = d && ([...d.querySelectorAll('button')].find(x => x.classList.contains('primary')));
-    if (!ok) { fail('La connexion n\'a pas pu démarrer. Rechargez la page et réessayez.'); return; }
-    ok.click();
-
-    // Attente du résultat : interface d'admin affichée (succès), message d'erreur ou retour à l'écran de connexion (échec)
-    let left = false;
-    const result = await waitFor(() => {
-      if (document.querySelector('.primary-sidebar')) return 'ok';
-      const d2 = dialog();
-      if (d2 && /pas valide|not valid|invalid|erreur|error/i.test(d2.textContent)) return 'invalid';
-      if (!tokenBtn()) left = true;
-      else if (left && !dialog()) return 'back';
-      return null;
-    }, 25000);
-    if (result === 'ok') {
-      input.value = '';
-      busy = false;
-      document.documentElement.classList.remove('unir-busy');
-      submitBtn.innerHTML = 'Connecté ✓';
-      sync();
-      return;
-    }
-    const still = dialog();
-    if (still) { const cancel = [...still.querySelectorAll('button')].find(x => x.classList.contains('secondary')); cancel && cancel.click(); }
-    fail(result === null
-      ? 'La connexion prend trop de temps. Vérifiez votre connexion Internet puis réessayez.'
-      : 'Connexion refusée. Vérifiez que le jeton est complet, qu\'il n\'a pas expiré et qu\'il donne accès au dépôt unir-legbassito (Contents : Read and write).');
+  // Connexion
+  $('[data-view=login]').addEventListener('submit', async e => {
+    e.preventDefault(); const f = e.target;
+    const email = $('#ul-email').value.trim(), pw = $('#ul-pw').value;
+    if (!email || !pw) return error(f, 'Saisissez votre adresse e-mail et votre mot de passe.');
+    busy(f, true, 'Connexion…');
+    try { await auth.login(email, pw, true); enterAdmin(); }
+    catch (err) { busy(f, false); error(f, fr(err)); }
   });
-
-  // Afficher / masquer le jeton
-  document.getElementById('ul-eye').addEventListener('click', () => {
-    const show = input.type === 'password';
-    input.type = show ? 'text' : 'password';
-    document.getElementById('ul-eye').setAttribute('aria-label', show ? 'Masquer le jeton' : 'Afficher le jeton');
+  // Mot de passe oublié
+  $('[data-view=forgot]').addEventListener('submit', async e => {
+    e.preventDefault(); const f = e.target; const email = $('#ul-email2').value.trim();
+    if (!email) return error(f, 'Saisissez votre adresse e-mail.');
+    busy(f, true, 'Envoi…');
+    try { await auth.requestPasswordRecovery(email); } catch (err) { /* même message pour ne pas révéler quels comptes existent */ }
+    busy(f, false); $('.ul-ok', f).hidden = false;
   });
+  // Invitation
+  $('[data-view=invite]').addEventListener('submit', async e => {
+    e.preventDefault(); const f = e.target; const a = $('#ul-new1').value, b = $('#ul-new2').value;
+    const pb = checkPw(a, b); if (pb) return error(f, pb);
+    busy(f, true, 'Activation…');
+    try { await auth.acceptInvite(token, a, true); enterAdmin(); }
+    catch (err) { busy(f, false); error(f, fr(err)); }
+  });
+  // Nouveau mot de passe
+  $('[data-view=reset]').addEventListener('submit', async e => {
+    e.preventDefault(); const f = e.target; const a = $('#ul-new3').value, b = $('#ul-new4').value;
+    const pb = checkPw(a, b); if (pb) return error(f, pb);
+    busy(f, true, 'Enregistrement…');
+    try { await auth.currentUser().update({ password: a }); enterAdmin(); }
+    catch (err) { busy(f, false); error(f, fr(err)); }
+  });
+  // Navigation entre les écrans
+  $$('[data-go]', root).forEach(a => a.addEventListener('click', () => {
+    if (a.dataset.go === 'forgot') $('#ul-email2').value = $('#ul-email').value;
+    $('.ul-ok', $('[data-view=forgot]')).hidden = true;
+    show(a.dataset.go);
+  }));
+  // Afficher / masquer les mots de passe
+  $$('.ul-eye', root).forEach(btn => btn.addEventListener('click', () => {
+    const i = btn.parentElement.querySelector('input'); const s = i.type === 'password';
+    i.type = s ? 'text' : 'password'; btn.setAttribute('aria-label', s ? 'Masquer le mot de passe' : 'Afficher le mot de passe');
+  }));
+
+  // Déconnexion depuis l'outil d'administration, ou session expirée : retour à cet écran
+  let staleSince = 0;
+  setInterval(() => {
+    if (flow || !root.classList.contains('gone')) return;
+    if (!loggedIn()) { show('login'); return; }
+    const decapLogin = document.querySelector('#nc-root input[type=password]');
+    if (decapLogin) {
+      if (!staleSince) staleSince = Date.now();
+      else if (Date.now() - staleSince > 2500) {
+        try { localStorage.removeItem(STORE); localStorage.removeItem('decap-cms-user'); } catch (e) {}
+        show('login'); error($('[data-view=login]'), 'Votre session a expiré. Reconnectez-vous.'); staleSince = 0;
+      }
+    } else staleSince = 0;
+  }, 700);
 
   // Ciel animé (comme sur le site)
   const c = document.getElementById('ul-sky'), x = c.getContext('2d');
@@ -318,7 +379,7 @@ html.unir-busy dialog.sui.modal::backdrop{opacity:0!important}
 })();
 </script>
 
-<!-- Espace d'administration : Sveltia CMS lit sa configuration dans admin/config.yml -->
-<script src="https://unpkg.com/@sveltia/cms@0.253.1/dist/sveltia-cms.js"></script>
+<!-- Outil d'administration : Decap CMS lit sa configuration dans admin/config.yml -->
+<script src="https://unpkg.com/decap-cms@3.17.3/dist/decap-cms.js"></script>
 </body>
 </html>

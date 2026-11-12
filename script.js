@@ -11,6 +11,12 @@ const $$ = (s, c = document) => [...c.querySelectorAll(s)];
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const PAGE = document.body.dataset.page;
 
+// Liens des e-mails d'invitation / de mot de passe oublié (ils arrivent sur l'accueil) → espace admin
+if (/^#(invite|recovery|confirmation|email_change)_token=/.test(location.hash)) {
+  location.replace('admin/' + location.hash);
+  return;
+}
+
 /* ---------- Utilitaires ---------- */
 const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 // Chemin d'image : les fichiers ajoutés depuis /admin commencent par « / » ; on les rend relatifs
