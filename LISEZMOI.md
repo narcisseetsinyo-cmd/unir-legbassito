@@ -32,8 +32,8 @@ Site de 3 pages (Accueil · La section · Nous rejoindre) avec un **espace admin
    - *Expiration* : par exemple 1 an
    - Copier le jeton affiché (il ne sera plus montré ensuite).
 2. Ouvrir `https://VOTRE-COMPTE.github.io/unir-legbassito/admin/`
-3. Cliquer sur **« Se connecter avec un jeton d'accès »** et coller le jeton.
-   (Le bouton « Se connecter avec GitHub » n'est pas configuré : utilisez le jeton.)
+3. Coller le jeton dans le champ **Jeton d'accès**, puis cliquer sur **Se connecter**.
+   (En cas de souci, le lien « Utiliser l'écran de connexion standard » en bas de page affiche l'écran d'origine de l'outil.)
 
 Le navigateur garde la connexion : pas besoin de recoller le jeton à chaque fois.
 
