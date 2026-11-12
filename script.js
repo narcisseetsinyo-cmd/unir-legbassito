@@ -311,7 +311,6 @@ function renderSection(P, B, AC, G) {
     <figure class="g ${FORMATS[p.format] || ''} reveal zoom" data-c="${esc(p.categorie)}"><img class="art" src="${esc(src(p.image))}" alt="${esc(p.description || p.titre)}" style="object-position:${CADRAGE[p.cadrage] || CADRAGE.centre}" loading="lazy"><figcaption class="cap"><b>${esc(p.titre)}</b><small>${esc(p.categorie)}</small></figcaption></figure>`).join('');
   return `
   ${pageHero(P.entete || {}, jumpLinks(curPage))}
-  ${marquee(['Bureau', 'Actions', 'Galerie', 'Terrain', 'Proximité', 'Engagement', 'Unité', 'Légbassito'])}
 
   <section class="sec soft" id="bureau">
     <div class="container">
@@ -358,7 +357,6 @@ function renderRejoindre(R, N) {
   const choix = list(ad.choix).length ? list(ad.choix) : ['Je souhaite adhérer'];
   return `
   ${pageHero(R.entete || {}, jumpLinks(curPage))}
-  ${marquee(['Actualités', 'Adhérer', 'Contact', 'Engagez-vous', 'Unir', 'Servir', 'Rassembler', 'Légbassito'])}
 
   <section class="sec soft" id="actualites">
     <div class="container">
