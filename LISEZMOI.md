@@ -33,7 +33,6 @@ Site de 3 pages (Accueil · La section · Nous rejoindre) avec un **espace admin
    - Copier le jeton affiché (il ne sera plus montré ensuite).
 2. Ouvrir `https://VOTRE-COMPTE.github.io/unir-legbassito/admin/`
 3. Coller le jeton dans le champ **Jeton d'accès**, puis cliquer sur **Se connecter**.
-   (En cas de souci, le lien « Utiliser l'écran de connexion standard » en bas de page affiche l'écran d'origine de l'outil.)
 
 Le navigateur garde la connexion : pas besoin de recoller le jeton à chaque fois.
 

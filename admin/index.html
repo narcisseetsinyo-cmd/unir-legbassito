@@ -104,7 +104,6 @@
 #unir-login[data-state="loading"] .ul-form,#unir-login:not([data-state="loading"]) .ul-loading{display:none}
 
 #unir-login .ul-foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:.82rem;opacity:.75}
-#unir-login .ul-foot button{text-decoration:underline;text-underline-offset:3px;cursor:pointer;opacity:.95}
 
 #unir-login .ul-fade{opacity:0;transform:translateY(24px);transition:opacity 1s var(--ease),transform 1s var(--ease)}
 #unir-login.in .ul-fade{opacity:1;transform:none}
@@ -189,7 +188,6 @@ html.unir-busy dialog.sui.modal::backdrop{opacity:0!important}
 
     <div class="ul-foot">
       <span>© UNIR · Section Légbassito</span>
-      <button type="button" id="ul-std">Utiliser l'écran de connexion standard</button>
     </div>
   </div>
 </div>
@@ -250,7 +248,7 @@ html.unir-busy dialog.sui.modal::backdrop{opacity:0!important}
     if (!b) { fail('L\'espace admin n\'est pas prêt. Rechargez la page et réessayez.'); return; }
     b.click();
     const field = await waitFor(() => { const d = dialog(); return d && d.querySelector('input'); }, 5000);
-    if (!field) { fail('La connexion n\'a pas pu démarrer. Utilisez l\'écran de connexion standard (lien en bas de page).'); return; }
+    if (!field) { fail('La connexion n\'a pas pu démarrer. Rechargez la page et réessayez.'); return; }
 
     // Transmet le jeton au champ de Sveltia
     Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(field, token);
@@ -259,7 +257,7 @@ html.unir-busy dialog.sui.modal::backdrop{opacity:0!important}
     await sleep(200);
     const d = dialog();
     const ok = d && ([...d.querySelectorAll('button')].find(x => x.classList.contains('primary')));
-    if (!ok) { fail('La connexion n\'a pas pu démarrer. Utilisez l\'écran de connexion standard (lien en bas de page).'); return; }
+    if (!ok) { fail('La connexion n\'a pas pu démarrer. Rechargez la page et réessayez.'); return; }
     ok.click();
 
     // Attente du résultat : interface d'admin affichée (succès), message d'erreur ou retour à l'écran de connexion (échec)
@@ -293,9 +291,6 @@ html.unir-busy dialog.sui.modal::backdrop{opacity:0!important}
     input.type = show ? 'text' : 'password';
     document.getElementById('ul-eye').setAttribute('aria-label', show ? 'Masquer le jeton' : 'Afficher le jeton');
   });
-
-  // Secours : revenir à l'écran de Sveltia
-  document.getElementById('ul-std').addEventListener('click', () => { manual = true; root.classList.add('gone'); document.documentElement.style.overflow = ''; });
 
   // Ciel animé (comme sur le site)
   const c = document.getElementById('ul-sky'), x = c.getContext('2d');
