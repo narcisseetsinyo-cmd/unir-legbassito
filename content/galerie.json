@@ -1,0 +1,44 @@
+{
+  "photos": [
+    {
+      "image": "assets/galerie/assemblee-generale.jpg",
+      "titre": "Assemblée générale",
+      "categorie": "Rencontres",
+      "format": "grand",
+      "cadrage": "centre",
+      "description": "Militants UNIR brandissant des drapeaux du parti lors de l'assemblée générale"
+    },
+    {
+      "image": "assets/galerie/rencontre-femmes.jpg",
+      "titre": "Rencontre avec les femmes",
+      "categorie": "Rencontres",
+      "format": "large",
+      "cadrage": "haut",
+      "description": "Militantes UNIR en tenue bleue, drapeaux à la main, lors de la rencontre avec les femmes"
+    },
+    {
+      "image": "assets/galerie/jeunes.jpg",
+      "titre": "Rencontre avec les jeunes",
+      "categorie": "Jeunesse",
+      "format": "normal",
+      "cadrage": "centre",
+      "description": "Jeunes militantes agitant des drapeaux UNIR lors d'une rencontre en plein air"
+    },
+    {
+      "image": "assets/galerie/accueil-militants.jpg",
+      "titre": "Accueil des militants",
+      "categorie": "Rencontres",
+      "format": "normal",
+      "cadrage": "centre",
+      "description": "Poignée de main avec des militants UNIR en tenue du parti"
+    },
+    {
+      "image": "assets/galerie/rassemblement.jpg",
+      "titre": "Grand rassemblement des militants",
+      "categorie": "Rencontres",
+      "format": "pleine",
+      "cadrage": "bas",
+      "description": "Salle comble de militants UNIR en tenue bleue brandissant des drapeaux"
+    }
+  ]
+}

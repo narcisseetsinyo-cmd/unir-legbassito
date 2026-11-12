@@ -1,0 +1,131 @@
+{
+  "hero": {
+    "surtitre": "Union pour la République · Légbassito",
+    "ligne1": "Ensemble,",
+    "accent": "bâtissons",
+    "ligne3": "Légbassito.",
+    "engagement": "Notre engagement :",
+    "mots_animes": [
+      "Unir",
+      "Servir",
+      "Rassembler",
+      "Bâtir Légbassito",
+      "Écouter chaque quartier"
+    ],
+    "intro": "La section UNIR de Légbassito rassemble les militantes et militants qui œuvrent, au plus près des populations, pour la paix, l'unité et le développement de notre commune.",
+    "bouton1": "Rejoindre la section",
+    "bouton2": "Nos actions",
+    "badge1_titre": "Proximité",
+    "badge1_texte": "Au service des quartiers",
+    "badge2_titre": "Paix",
+    "badge2_texte": "& unité nationale"
+  },
+  "bandeau": [
+    "Unir",
+    "Servir",
+    "Rassembler",
+    "Bâtir",
+    "Paix",
+    "Développement",
+    "Proximité",
+    "Jeunesse"
+  ],
+  "apropos": {
+    "surtitre": "À propos",
+    "titre": "Une section au cœur de",
+    "accent": "Légbassito",
+    "paragraphes": [
+      "UNIR, l'Union pour la République, est un parti politique né lors de son Assemblée générale constitutive du 14 avril 2012 à Atakpamé.",
+      "La section de Légbassito porte la vision du parti au niveau local : écouter les populations, relayer leurs préoccupations, mobiliser les militants et accompagner les initiatives qui font avancer notre commune, de quartier en quartier."
+    ],
+    "photo": "assets/apropos.jpg",
+    "photo_texte": "Portrait en costume bleu lors d'une interview télévisée",
+    "annee": "2012",
+    "texte_badge": "• ANNÉE DE CRÉATION • UNIR ",
+    "faits": [
+      {
+        "libelle": "Parti",
+        "valeur": "Union pour la République"
+      },
+      {
+        "libelle": "Création du parti",
+        "valeur": "14 avril 2012, Atakpamé"
+      },
+      {
+        "libelle": "Section",
+        "valeur": "Légbassito"
+      },
+      {
+        "libelle": "Symbole",
+        "valeur": "La colombe de la paix"
+      }
+    ],
+    "bouton": "Site national du parti"
+  },
+  "chiffres": [
+    {
+      "valeur": 115400,
+      "suffixe": "+",
+      "format": "nombre",
+      "libelle": "Militantes et militants engagés"
+    },
+    {
+      "valeur": 12,
+      "suffixe": "",
+      "format": "nombre",
+      "libelle": "Comités de base actifs"
+    },
+    {
+      "valeur": 40,
+      "suffixe": "+",
+      "format": "nombre",
+      "libelle": "Activités menées par an"
+    },
+    {
+      "valeur": 2012,
+      "suffixe": "",
+      "format": "annee",
+      "libelle": "Année de création du parti"
+    }
+  ],
+  "valeurs": {
+    "surtitre": "Nos valeurs",
+    "titre": "Ce qui nous",
+    "accent": "rassemble",
+    "intro": "Trois piliers guident l'action de la section au quotidien.",
+    "liste": [
+      {
+        "icone": "paix",
+        "titre": "Paix & unité",
+        "texte": "Comme la colombe de notre emblème, nous plaçons la cohésion sociale et le vivre-ensemble au-dessus de tout."
+      },
+      {
+        "icone": "developpement",
+        "titre": "Développement",
+        "texte": "Accompagner les projets qui améliorent la vie des habitants : routes, eau, écoles, santé, emploi."
+      },
+      {
+        "icone": "proximite",
+        "titre": "Proximité",
+        "texte": "Être présents sur le terrain, à l'écoute des femmes, des jeunes et des anciens de chaque quartier."
+      }
+    ]
+  },
+  "citations": [
+    {
+      "texte": "Unir, c'est d'abord écouter. Chaque quartier de Légbassito a une voix, et notre rôle est de la porter.",
+      "auteur": "Section UNIR Légbassito",
+      "precision": "Notre engagement"
+    },
+    {
+      "texte": "La paix n'est pas un slogan, c'est un travail de tous les jours, entre voisins, entre générations.",
+      "auteur": "Section UNIR Légbassito",
+      "precision": "Notre vision"
+    },
+    {
+      "texte": "Les jeunes et les femmes sont la force de notre commune. Nous leur ouvrons grand les portes.",
+      "auteur": "Section UNIR Légbassito",
+      "precision": "Notre promesse"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "liste": [
+    {
+      "date": "[Date]",
+      "titre": "Assemblée générale de la section",
+      "texte": "Bilan des activités, renouvellement des instances et feuille de route de l'année.",
+      "etiquette": "Vie du parti"
+    },
+    {
+      "date": "[Date]",
+      "titre": "Journée de salubrité",
+      "texte": "Militants et habitants mobilisés pour assainir les rues et les marchés de Légbassito.",
+      "etiquette": "Action citoyenne"
+    },
+    {
+      "date": "[Date]",
+      "titre": "Rencontre avec les femmes leaders",
+      "texte": "Échanges avec le Mouvement des femmes UNIR sur l'autonomisation économique.",
+      "etiquette": "Femmes"
+    },
+    {
+      "date": "[Date]",
+      "titre": "Tournoi de la jeunesse",
+      "texte": "Sport, cohésion et sensibilisation pour les jeunes de la commune.",
+      "etiquette": "Jeunesse"
+    },
+    {
+      "date": "[Date]",
+      "titre": "Formation des militants",
+      "texte": "Renforcement des capacités des responsables de comités de base.",
+      "etiquette": "Formation"
+    }
+  ]
+}

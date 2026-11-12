@@ -1,0 +1,26 @@
+{
+  "entete": {
+    "surtitre": "La section",
+    "titre": "Une équipe, des actions,",
+    "accent": "un terrain",
+    "intro": "Découvrez les femmes et les hommes qui animent la section UNIR de Légbassito, nos actions de l'année et nos rencontres en images."
+  },
+  "bureau": {
+    "surtitre": "Le bureau",
+    "titre": "Les femmes et les hommes de la",
+    "accent": "section",
+    "intro": "Une équipe engagée pour animer la vie du parti à Légbassito."
+  },
+  "actions": {
+    "surtitre": "Nos actions",
+    "titre": "Sur le terrain,",
+    "accent": "toute l'année",
+    "intro": "Les grands moments de la vie de la section."
+  },
+  "galerie": {
+    "surtitre": "Galerie",
+    "titre": "En",
+    "accent": "images",
+    "intro": "Retour sur nos rencontres, mobilisations et actions sociales."
+  }
+}

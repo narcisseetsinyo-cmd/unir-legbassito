@@ -1,0 +1,60 @@
+{
+  "membres": [
+    {
+      "nom": "[Nom Prénom]",
+      "fonction": "Secrétaire général·e de section",
+      "photo": "",
+      "facebook": "",
+      "whatsapp": ""
+    },
+    {
+      "nom": "[Nom Prénom]",
+      "fonction": "Secrétaire adjoint·e",
+      "photo": "",
+      "facebook": "",
+      "whatsapp": ""
+    },
+    {
+      "nom": "[Nom Prénom]",
+      "fonction": "Trésorier·ère",
+      "photo": "",
+      "facebook": "",
+      "whatsapp": ""
+    },
+    {
+      "nom": "[Nom Prénom]",
+      "fonction": "Chargé·e de la communication",
+      "photo": "",
+      "facebook": "",
+      "whatsapp": ""
+    },
+    {
+      "nom": "[Nom Prénom]",
+      "fonction": "Responsable des femmes (MFU)",
+      "photo": "",
+      "facebook": "",
+      "whatsapp": ""
+    },
+    {
+      "nom": "[Nom Prénom]",
+      "fonction": "Responsable des jeunes",
+      "photo": "",
+      "facebook": "",
+      "whatsapp": ""
+    },
+    {
+      "nom": "[Nom Prénom]",
+      "fonction": "Chargé·e de la mobilisation",
+      "photo": "",
+      "facebook": "",
+      "whatsapp": ""
+    },
+    {
+      "nom": "[Nom Prénom]",
+      "fonction": "Chargé·e de l'organisation",
+      "photo": "",
+      "facebook": "",
+      "whatsapp": ""
+    }
+  ]
+}

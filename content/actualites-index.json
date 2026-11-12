@@ -1,0 +1,12 @@
+{
+  "articles": [
+    {
+      "slug": "bienvenue-sur-le-site-de-la-section",
+      "titre": "Bienvenue sur le site de la section",
+      "date": "2026-10-15",
+      "categorie": "Annonce",
+      "image": "assets/galerie/rassemblement.jpg",
+      "resume": "Un nouvel espace pour suivre nos activités, découvrir le bureau et rejoindre la section en quelques clics."
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "entete": {
+    "surtitre": "Nous rejoindre",
+    "titre": "Restez informés,",
+    "accent": "engagez-vous",
+    "intro": "Suivez les actualités de la section, devenez militant·e ou écrivez-nous : nous sommes à votre écoute."
+  },
+  "actualites": {
+    "surtitre": "Actualités",
+    "titre": "Les dernières",
+    "accent": "nouvelles",
+    "intro": "Suivez la vie de la section et les annonces à venir."
+  },
+  "adhesion": {
+    "surtitre": "Adhérer",
+    "titre": "Rejoignez la",
+    "accent": "section",
+    "intro": "Vous partagez nos valeurs de paix, d'unité et de développement ? Devenez militant·e de la section UNIR de Légbassito.",
+    "etapes": [
+      {
+        "titre": "Remplissez le formulaire",
+        "texte": "Quelques informations pour vous connaître."
+      },
+      {
+        "titre": "Envoyez-le par WhatsApp",
+        "texte": "Votre demande arrive directement au secrétariat de la section."
+      },
+      {
+        "titre": "Recevez votre carte",
+        "texte": "Un responsable vous recontacte pour finaliser votre adhésion."
+      }
+    ],
+    "choix": [
+      "Je souhaite adhérer",
+      "Je suis déjà membre (mise à jour)",
+      "Je souhaite être bénévole",
+      "Autre demande"
+    ],
+    "note": "Votre demande s'ouvre dans WhatsApp, prête à être envoyée."
+  },
+  "contact": {
+    "surtitre": "Contact",
+    "titre": "Parlons de",
+    "accent": "Légbassito",
+    "intro": "Une question, une suggestion ou une préoccupation de votre quartier : écrivez-nous."
+  }
+}
