@@ -8,6 +8,7 @@ backend:
   name: github
   repo: narcisseetsinyo-cmd/unir-legbassito   # ← compte GitHub / nom du dépôt
   branch: main
+  auth_methods: [token]   # connexion par jeton d'accès uniquement
   commit_messages:
     create: "Admin : ajout de {{slug}}"
     update: "Admin : mise à jour de {{slug}}"
